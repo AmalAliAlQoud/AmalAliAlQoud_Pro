@@ -1,0 +1,51 @@
+nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: white;
+}
+
+nav li {
+    display: inline-block;
+    border: 2px solid#add;
+    padding: 8px 15px;
+    border-radius: 10px;
+    margin-left: 3px;
+    transition: transform 0.3s;
+}
+
+nav li:hover {
+    background-color: white;
+    transform: scale(1.05);
+    border: 2px solid#5F9EA0;
+}
+
+nav li:hover a {
+    color: #5F9EA0;
+    font-weight: bold;
+}
+
+nav v na main {
+    padding: 20px;
+}
+
+.plan {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+}
+
+.plan.pro {
+    border: 2px solid #5F9EA0;
+    padding: 20px;
+}
+
+.plan.pro img {
+    display: block;
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    margin: 0 auto 25px;
+    border-radius: 15px;
+}

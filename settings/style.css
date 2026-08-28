@@ -1,0 +1,59 @@
+form select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #5F9EA0;
+    border-radius: 8px;
+    font-size: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+form {
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 25px;
+    background-color: #f5fafa;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    text-align: right;
+}
+
+form label {
+    display: inline-block;
+    color: #4682B4;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+form select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #5F9EA0;
+    border-radius: 8px;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.notifications {
+    display: block;
+    margin-top: 15px;
+    direction: rtl;
+    margin-bottom: 30px;
+}
+
+.notifications label {
+    display: block;
+}
+
+.notifications div {
+    display: inline-flex;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 50px;
+    white-space: nowrap;
+}
