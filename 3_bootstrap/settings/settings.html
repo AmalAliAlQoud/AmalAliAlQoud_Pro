@@ -1,42 +1,73 @@
 <!-- إعدادات الحساب -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-  <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
     <meta charset="UTF-8">
     <title>الإعدادات</title>
 </head>
+
 <body>
-    <header>
-        <h1>إعدادات الحساب</h1>
-        <nav><a href="index.html">الصفحة الرئيسية</a></nav>
+    <header class="container-fluid p-4 text-white d-flex flex-column" style="background-color: #172554;">
+
+        <h1 class="text-center mb-3">إعدادات الحساب</h1>
+        <nav class="align-self-center"><a class="btn btn-outline-light btn-sm px-3" href="../index/index.html">الصفحة الرئيسية</a></nav>
     </header>
 
-    <main>
-        <section>
-            <h2>تفضيلات المستخدم</h2>
-            <form>
-                <label>اللغة المفضلة:</label><br>
-                <select>
-                    <option>العربية</option>
+    <main class="container-fluid">
+        <section class="container p-5  my-5 border text-bg-light">
+            <h2 class="text-primary">تفضيلات المستخدم</h2>
+            <form class="border p-5  mt-5 shadow-sm">
+                <div class="row">
+                    <div class="col">
+                        <label>اللغة المفضلة:</label><br>
+                        <select class="form-select mt-3">
+                    <option class="dropdown-item">العربية</option>
                     <option>English</option>
-                </select><br><br>
+                </select><br>
+                    </div>
 
-                <label>تفعيل الإشعارات:</label><br>
-                <input type="checkbox" checked> بريد إلكتروني<br>
-                <input type="checkbox"> رسائل نصية<br><br>
+                    <div class="col" dir="rtl">
+                        <label>تفعيل الإشعارات:</label>
+                        <div class="form-check d-flex justify-content-start align-items-center gap-2">
+                            <input class="form-check-input m-0" type="checkbox" checked>
+                            <span>بريد إلكتروني</span>
+                        </div>
 
-                <label>اختيار المظهر:</label><br>
-                <input type="radio" name="theme" checked> فاتح
-                <input type="radio" name="theme"> داكن<br><br>
+                        <div class="form-check d-flex justify-content-start align-items-center gap-2">
+                            <input class="form-check-input m-0" type="checkbox">
+                            <span>رسائل نصية</span>
+                        </div>
+                    </div>
 
-                <button>حفظ الإعدادات</button>
+
+                    <div class="col">
+                        <label>اختيار المظهر:</label><br>
+                        <div>
+                            <input type="radio" name="theme " checked> فاتح
+                        </div>
+                        <div>
+                            <input type="radio" name="theme "> داكن
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <button class="btn btn-primary mt-3" style="width: 150px;">حفظ الإعدادات</button>
             </form>
         </section>
     </main>
 
-    <footer>
+    <footer class="container-fluid bg-dark text-white text-center py-4 mt-5 ">
+
         <p>© 2025 إعدادات الحساب - جميع الحقوق محفوظة</p>
     </footer>
 </body>
+
+</html>
+
 </html>
