@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        
+        label {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        input {
+            width: 200px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+        
+        #age {
+            margin: 15px 0;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .highlight {
+            background-color: aqua;
+        }
+        
+        table {
+            width: 60%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            font-family: Arial, sans-serif;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        tr:hover {
+            background-color: #e8f4fc;
+        }
+    </style>
+</head>
+
+<body>
+    <table id="GradeTable">
+        <tr>
+            <td>name</td>
+            <td>grade</td>
+        </tr>
+
+    </table>
+    <script>
+        const students = [{
+            name: "Ali",
+            grade: 90
+        }, {
+            name: "Sara",
+            grade: 85
+        }, {
+            name: "Omar",
+            grade: 78
+        }];
+
+
+        const tableBody = document.getElementById("GradeTable");
+
+
+        students.forEach(student => {
+            const row = document.createElement("tr");
+            row.innerHTML = (`<td>${student.name} </td><td>${student.grade}</td>`);
+            tableBody.appendChild(row);
+        });
+    </script>
+</body>
+
+</html>

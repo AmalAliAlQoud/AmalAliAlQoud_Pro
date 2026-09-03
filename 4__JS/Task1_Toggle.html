@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>task_1_show_age</title>
+    <style>
+     body 
+    { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background-color: #f4f4f4; } label { font-size: 20px; margin-bottom: 10px; } input { width: 200px; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; } button { padding: 10px 20px; border: none; border-radius: 5px; background-color: #007bff; color: white; font-size: 16px; cursor: pointer; } button:hover { background-color: #0056b3; } #age { margin: 15px 0; font-size: 20px; font-weight: bold; } 
+   .highlight{
+     background-color: aqua;
+   }
+   </style>
+</head>
+<body>
+   <p id="para" class="highlight">الحياة رحلة قصيرة تتسع بالرضا وتضيق بالتشاؤم، وهي مساحة نزرع فيها الأفعال الطيبة لنحصد أثرها.</p>
+    <button id="btn">change background</button>
+
+
+
+<script>
+   document.getElementById("para").classList.remove("highlight");
+document.getElementById("btn").addEventListener("click", () => {
+  document.getElementById("para").classList.toggle("highlight");
+});</script>
+
+</body>
+
+</html>
