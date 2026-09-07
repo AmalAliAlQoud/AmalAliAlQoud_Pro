@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Filter List</title>
+</head>
+
+<body>
+    <h2>Task 3: Filter List</h2>
+    <input type="text" id="search" placeholder="Search names...">
+    <ul id="nameList">
+        <li>Mohamed</li>
+        <li>Ahmed</li>
+        <li>Sarah</li>
+        <li>Ali</li>
+        <li>Huda</li>
+    </ul>
+
+    <script>
+        var nameList = document.querySelectorAll("#nameList li");
+        document.getElementById("search").addEventListener("keyup", (e) => {
+
+            var InputText = document.getElementById("search").value;
+
+            nameList.forEach(element => {
+                element.style.display = element.textContent.includes(InputText) ? 'block' : 'none';
+            });
+        });
+    </script>
+</body>
+
+</html>
