@@ -1,0 +1,48 @@
+﻿@model IList<Category>
+
+
+
+
+
+<div class="container mt-5">
+
+    <h2 class="mb-4">Categories</h2>
+
+    <table class="table table-striped table-hover table-bordered">
+
+        <thead class="table-dark">
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Image url</th>
+                <th>Categories Count</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var category in Model)
+            {
+                <tr>
+                    <td>@category.Id</td>
+                    <td>@category.Name</td>
+                    <td>@category.ImageUrl</td>
+                    <td>@category.ProductsCount</td>
+
+
+
+                   
+
+                </tr>            
+            }
+
+
+
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+    
