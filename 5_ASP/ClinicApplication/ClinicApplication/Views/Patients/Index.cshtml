@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Patient>
+
+
+<div class="container">
+    <h1>Patients</h1>
+
+    <div class="text-end">
+        <a asp-action="Create" class="btn btn-primary">New </a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Date of Birth</th>
+                <th>Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pat in Model)
+            {
+
+                <tr>
+                    <td>@pat.Id</td>
+                    <td>@pat.Name</td>
+                    <td>@pat.Phone</td>
+                    <td>@pat.Date_of_Birth</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-Id="@pat.Id" class="btn btn-warning"> Edit  </a>
+                        <a asp-action="Delete" asp-route-Id="@pat.Id" class="btn btn-danger"> Delete  </a>
+                    </td>
+                </tr>
+
+            }
+
+
+        </tbody>
+
+    </table>
+</div>

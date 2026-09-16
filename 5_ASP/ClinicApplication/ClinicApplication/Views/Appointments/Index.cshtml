@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Appointment>
+
+
+<div class="container">
+    <h1>Appointments</h1>
+
+    <div class="text-end">
+        <a asp-action="Create" class="btn btn-primary">New </a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Patient ID</th>
+                <th>Doctor ID</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var app in Model)
+            {
+
+                <tr>
+                    <td>@app.Id</td>
+                    <td>@app.Patient_ID</td>
+                    <td>@app.Doctor_ID</td>
+                    <td>@app.Date</td>
+                    <td>@app.Time</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-Id="@app.Id" class="btn btn-warning"> Edit  </a>
+                        <a asp-action="Delete" asp-route-Id="@app.Id" class="btn btn-danger"> Delete  </a>
+                    </td>
+                </tr>
+
+            }
+
+
+        </tbody>
+
+    </table>
+</div>

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Prescription>
+
+
+<div class="container">
+    <h1>Prescription</h1>
+
+    <div class="text-end">
+        <a asp-action="Create" class="btn btn-primary">New </a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Record ID</th>
+                <th>Medicine Name</th>
+                <th>Dosage</th>
+                <th>Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pre in Model)
+            {
+
+                <tr>
+                    <td>@pre.Id</td>
+                    <td>@pre.mdRecord_ID</td>
+                    <td>@pre.Medicine_Name</td>
+                    <td>@pre.Dosage</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-Id="@pre.Id" class="btn btn-warning"> Edit  </a>
+                        <a asp-action="Delete" asp-route-Id="@pre.Id" class="btn btn-danger"> Delete  </a>
+                    </td>
+                </tr>
+
+            }
+
+
+        </tbody>
+
+    </table>
+</div>

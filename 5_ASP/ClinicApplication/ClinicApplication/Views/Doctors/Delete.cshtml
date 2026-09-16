@@ -1,0 +1,41 @@
+﻿@model Doctor
+@{
+    ViewData["Title"] = "Delete Doctor";
+}
+
+
+<div class="container">
+    <h1>Delete Doctor</h1>
+    <form asp-action="Delete" method="post">
+        <div class="form-group">
+
+            <div class="text-danger" asp-validation-summary="All">
+            </div>
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" readonly />
+
+
+        </div>
+        <div class="form-group">
+            <label asp-for="Specialty" class="control-label"></label>
+            <input asp-for="Specialty" class="form-control" readonly />
+
+        </div>
+        <div class="form-group">
+            <label asp-for="Phone" class="control-label"></label>
+            <input asp-for="Phone" class="form-control" readonly />
+        </div>
+
+        
+        <div class="form-group">
+            <input type="submit" value="Delete" class="btn btn-danger" />
+        </div>
+    </form>
+    <div>
+        <a asp-action="Delete">Back to List</a>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

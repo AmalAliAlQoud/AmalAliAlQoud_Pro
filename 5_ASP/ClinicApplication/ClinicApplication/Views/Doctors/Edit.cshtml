@@ -1,0 +1,46 @@
+﻿@model Doctor
+@{
+    ViewData["Title"] = "Edit Doctor";
+}
+
+
+<div class="container">
+    <h1>update Doctor</h1>
+    <form asp-action="Edit" method="post">
+        <div class="form-group">
+
+            <div class="text-danger" asp-validation-summary="All">
+            </div>
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span class="text-danger" asp-validation-for="Name"></span>
+
+
+        </div>
+        <div class="form-group">
+            <label asp-for="Specialty" class="control-label"></label>
+            <input asp-for="Specialty" class="form-control" />
+            <span class="text-danger" asp-validation-for="Specialty"></span>
+
+        </div>
+        <div class="form-group">
+            <label asp-for="Phone" class="control-label"></label>
+            <input asp-for="Phone" class="form-control" />
+            <span class="text-danger" asp-validation-for="Phone"></span>
+
+
+        </div>
+
+        
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+    </form>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
