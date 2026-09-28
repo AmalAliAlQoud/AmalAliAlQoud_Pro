@@ -3,41 +3,50 @@
     ViewData["Title"] = "Create Doctor";
 }
 
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-primary shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0 fs-5 fw-bold">
+                        <i class="bi bi-person-badge me-2"></i>Create New Doctor
+                    </h3>
+                </div>
+                
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div class="text-danger mb-3" asp-validation-summary="All"></div>
 
-<div class="container">
-    <h1>Create Doctor</h1>
-    <form asp-action="Create" method="post">
-        <div class="form-group">
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label fw-bold"></label>
+                            <input asp-for="Name" class="form-control" placeholder="Enter doctor's full name" />
+                            <span class="text-danger" asp-validation-for="Name"></span>
+                        </div>
 
-            <div class="text-danger" asp-validation-summary="All">
+                        <div class="mb-3">
+                            <label asp-for="Specialty" class="form-label fw-bold"></label>
+                            <input asp-for="Specialty" class="form-control" placeholder="Enter medical specialty" />
+                            <span class="text-danger" asp-validation-for="Specialty"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Phone" class="form-label fw-bold"></label>
+                            <input asp-for="Phone" class="form-control" placeholder="Enter phone number" />
+                            <span class="text-danger" asp-validation-for="Phone"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                Back to List
+                            </a>
+                            <button type="submit" class="btn btn-primary fw-bold">
+                                Create Doctor
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <label asp-for="Name" class="control-label"></label>
-            <input asp-for="Name" class="form-control" />
-            <span class="text-danger" asp-validation-for="Name"></span>
-
-
         </div>
-        <div class="form-group">
-            <label asp-for="Specialty" class="control-label"></label>
-            <input asp-for="Specialty" class="form-control" />
-            <span class="text-danger" asp-validation-for="Specialty"></span>
-
-        </div>
-        <div class="form-group">
-            <label asp-for="Phone" class="control-label"></label>
-            <input asp-for="Phone" class="form-control" />
-            <span class="text-danger" asp-validation-for="Phone"></span>
-
-
-        </div>
-
-        
-        <div class="form-group">
-            <input type="submit" value="Create" class="btn btn-primary" />
-        </div>
-    </form>
-    <div>
-        <a asp-action="Index">Back to List</a>
     </div>
 </div>
 

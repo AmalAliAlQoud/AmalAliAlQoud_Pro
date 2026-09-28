@@ -1,9 +1,14 @@
 ﻿using ClinicApplication.Data;
+using ClinicApplication.Migrations;
 using ClinicApplication.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ClinicApplication.Controllers
 {
+    [Authorize]
+
     public class AppointmentsController : Controller
     {
         private readonly AppDbContext _db;
@@ -47,9 +52,9 @@ namespace ClinicApplication.Controllers
         //Edit
         //==========================
         [HttpGet]
-        public ActionResult Edit(int Id)
+        public ActionResult Edit(string Uuid)
         {
-            var app = _db.Appointments.Find(Id);
+            var app = _db.Appointments.FirstOrDefault(e => e.Uuid == Uuid);
             if (app == null)
             {
                 return NotFound();
@@ -63,7 +68,21 @@ namespace ClinicApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Appointments.Update(app);
+
+                var oldApp = _db.Appointments.FirstOrDefault(e => e.Uuid == app.Uuid);
+
+                if (oldApp == null)
+                    return NotFound();
+
+
+               
+                    oldApp.Patient_ID = app.Patient_ID;
+                    oldApp.Doctor_ID = app.Doctor_ID;
+                    oldApp.Date = app.Date;
+                    oldApp.Time = app.Time;
+               
+
+                // _db.Appointments.Update(app);
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -76,9 +95,9 @@ namespace ClinicApplication.Controllers
         //Delete
         //==========================
         [HttpGet]
-        public ActionResult Delete(int Id)
+        public ActionResult Delete(string Uuid)
         {
-            var app = _db.Appointments.Find(Id);
+            var app = _db.Appointments.FirstOrDefault(e => e.Uuid == Uuid);
             if (app == null)
             {
                 return NotFound();
@@ -88,8 +107,13 @@ namespace ClinicApplication.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(Appointment app)
+        [ActionName("Delete")]
+        public ActionResult DeleteConfirm(string Uuid)
         {
+            var app = _db.Appointments.FirstOrDefault(e => e.Uuid == Uuid);
+            if (app == null)
+                return NotFound();
+
 
             _db.Appointments.Remove(app);
             _db.SaveChanges();

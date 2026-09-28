@@ -42,6 +42,10 @@ namespace ClinicApplication.Migrations
                     b.Property<TimeOnly>("Time")
                         .HasColumnType("time");
 
+                    b.Property<string>("Uuid")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Appointments");
@@ -63,6 +67,10 @@ namespace ClinicApplication.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Specialty")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Uuid")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -93,6 +101,10 @@ namespace ClinicApplication.Migrations
                     b.Property<int>("Patient_ID")
                         .HasColumnType("int");
 
+                    b.Property<string>("Uuid")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Medical_Records");
@@ -116,6 +128,10 @@ namespace ClinicApplication.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Uuid")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Patients");
@@ -137,12 +153,52 @@ namespace ClinicApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Uuid")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("mdRecord_ID")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.ToTable("Prescriptions");
+                });
+
+            modelBuilder.Entity("ClinicApplication.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsLocked")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Uuid")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }

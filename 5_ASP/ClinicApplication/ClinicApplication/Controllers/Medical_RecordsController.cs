@@ -1,11 +1,14 @@
 ﻿using ClinicApplication.Data;
+using ClinicApplication.Migrations;
 using ClinicApplication.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicApplication.Controllers
 {
     public class Medical_RecordsController : Controller
     {
+       
 
         private readonly AppDbContext _db;
         public Medical_RecordsController(AppDbContext db)
@@ -47,9 +50,10 @@ namespace ClinicApplication.Controllers
         //Edit
         //==========================
         [HttpGet]
-        public ActionResult Edit(int Id)
+        public ActionResult Edit(string Uuid)
         {
-            var md = _db.Medical_Records.Find(Id);
+            var md = _db.Medical_Records.FirstOrDefault(e => e.Uuid == Uuid);
+
             if (md == null)
             {
                 return NotFound();
@@ -61,9 +65,17 @@ namespace ClinicApplication.Controllers
         [HttpPost]
         public ActionResult Edit(Medical_Record md)
         {
+            var oldmd = _db.Medical_Records.FirstOrDefault(e => e.Uuid == md.Uuid);
+
             if (ModelState.IsValid)
             {
-                _db.Medical_Records.Update(md);
+                oldmd.Patient_ID=md.Patient_ID;
+                oldmd.Doctor_ID = md.Doctor_ID;
+                oldmd.Diagnosis = md.Diagnosis;
+                oldmd.Notes = md.Notes;
+
+
+                //_db.Medical_Records.Update(md);
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -76,9 +88,9 @@ namespace ClinicApplication.Controllers
         //Delete
         //==========================
         [HttpGet]
-        public ActionResult Delete(int Id)
+        public ActionResult Delete(string Uuid)
         {
-            var md = _db.Medical_Records.Find(Id);
+            var md = _db.Medical_Records.FirstOrDefault(e => e.Uuid == Uuid);
             if (md == null)
             {
                 return NotFound();
@@ -88,8 +100,15 @@ namespace ClinicApplication.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(Medical_Record md)
+        [ActionName("Delete")]
+        public ActionResult Deleteconfirm(string Uuid)
         {
+            var md = _db.Medical_Records.FirstOrDefault(e => e.Uuid == Uuid);
+
+            if (md == null)
+            {
+                return NotFound();
+            }
 
             _db.Medical_Records.Remove(md);
             _db.SaveChanges();

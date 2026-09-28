@@ -21,6 +21,9 @@ namespace ClinicApplication.Data
 
         public DbSet<Prescription> Prescriptions { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
+
 
 
     }

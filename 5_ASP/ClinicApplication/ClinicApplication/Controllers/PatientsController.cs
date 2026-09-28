@@ -1,9 +1,13 @@
 ﻿using ClinicApplication.Data;
+using ClinicApplication.Migrations;
 using ClinicApplication.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicApplication.Controllers
 {
+    [Authorize]
+
     public class PatientsController : Controller
     {
 
@@ -46,9 +50,10 @@ namespace ClinicApplication.Controllers
         //Edit
         //==========================
         [HttpGet]
-        public ActionResult Edit(int Id)
+        public ActionResult Edit(string Uuid)
         {
-            var pat = _db.Patients.Find(Id);
+            var pat = _db.Patients.FirstOrDefault(e => e.Uuid == Uuid);
+
             if (pat == null)
             {
                 return NotFound();
@@ -62,8 +67,20 @@ namespace ClinicApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Patients.Update(pat);
-                _db.SaveChanges();
+               
+               
+                    var oldPatient = _db.Patients.FirstOrDefault(e => e.Uuid == pat.Uuid);
+
+                    if (oldPatient == null)
+                        return NotFound();
+
+                    oldPatient.Name = pat.Name;
+                    oldPatient.Phone = pat.Phone;
+                    oldPatient.Date_of_Birth = pat.Date_of_Birth;
+
+
+               
+                    _db.SaveChanges();
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill all the required fields.");
@@ -75,9 +92,9 @@ namespace ClinicApplication.Controllers
         //Delete
         //==========================
         [HttpGet]
-        public ActionResult Delete(int Id)
+        public ActionResult Delete(string Uuid)
         {
-            var pat = _db.Patients.Find(Id);
+            var pat = _db.Patients.FirstOrDefault(e => e.Uuid == Uuid);
             if (pat == null)
             {
                 return NotFound();
@@ -87,8 +104,17 @@ namespace ClinicApplication.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(Patient pat)
+        [ActionName("Delete")]
+        public ActionResult DeleteConfirm(string Uuid)
         {
+                         
+            var pat = _db.Patients.FirstOrDefault(e => e.Uuid == Uuid);
+            if (pat == null)
+            {
+                return NotFound();
+            }
+
+
 
             _db.Patients.Remove(pat);
             _db.SaveChanges();

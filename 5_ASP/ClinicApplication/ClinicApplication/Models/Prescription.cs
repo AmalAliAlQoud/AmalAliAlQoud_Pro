@@ -1,12 +1,16 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 namespace ClinicApplication.Models
 
 {
+    [Index(nameof(Uuid), IsUnique = true)]
+
     public class Prescription
     {
         [Key]
         public int Id { get; set; }
+        public string Uuid { get; set; } = Guid.NewGuid().ToString();
 
 
         [DisplayName("Medical Record ID")]

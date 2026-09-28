@@ -1,4 +1,5 @@
 using ClinicApplication.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,9 +12,15 @@ var conectionString = builder.Configuration.GetConnectionString("DefaultConnecti
 builder.Services.AddDbContext<AppDbContext>(options =>
 options.UseSqlServer(conectionString));
 
-//builder.Services.AddDbContext<AppDbContext>(options =>
-//    options.UseSqlServer(conectionString, sqlOptions =>
-//        sqlOptions.EnableRetryOnFailure()));
+// ================================ 
+// Cookie Authentication 
+// ================================
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Accounts/Login";
+        options.AccessDeniedPath = "/Account/AccessDenied";
+    });
 
 var app = builder.Build();
 
@@ -30,10 +37,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Accounts}/{action=login}/{id?}");
 
 app.Run();
