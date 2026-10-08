@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Medical_Record>
+﻿@using ClinicApplication.Dtos
+@model IEnumerable<Medical_RecordDto>
 
 @{
     ViewData["Title"] = "Medical Records";
@@ -25,8 +26,8 @@
                     <thead class="table-light">
                         <tr>
                             <th class="ps-3" style="width: 50px;">#</th>
-                            <th>Patient ID</th>
-                            <th>Doctor ID</th>
+                            <th>Patient Name</th>
+                            <th>Doctor Name</th>
                             <th>Diagnosis</th>
                             <th>Notes</th>
                             <th class="text-center" style="width: 200px;">Actions</th>
@@ -37,8 +38,8 @@
                         {
                             <tr>
                                 <td class="ps-3 fw-bold text-secondary">@count</td>
-                                <td><span class="badge bg-light text-dark border">@md.Patient_ID</span></td>
-                                <td><span class="badge bg-light text-dark border">@md.Doctor_ID</span></td>
+                                <td><span class="badge bg-light text-dark border">@md.PatientName</span></td>
+                                <td><span class="badge bg-light text-dark border">@md.DoctorName</span></td>
                                 <td class="fw-semibold">@md.Diagnosis</td>
                                 <td><span class="text-muted">@md.Notes</span></td>
                                 <td class="text-center">

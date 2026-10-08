@@ -33,10 +33,12 @@ namespace ClinicApplication.Migrations
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
-                    b.Property<int>("Doctor_ID")
+                    b.Property<int?>("Doctor_ID")
+                        .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<int>("Patient_ID")
+                    b.Property<int?>("Patient_ID")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<TimeOnly>("Time")
@@ -44,9 +46,16 @@ namespace ClinicApplication.Migrations
 
                     b.Property<string>("Uuid")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Doctor_ID");
+
+                    b.HasIndex("Patient_ID");
+
+                    b.HasIndex("Uuid")
+                        .IsUnique();
 
                     b.ToTable("Appointments");
                 });
@@ -66,15 +75,20 @@ namespace ClinicApplication.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Specialty")
+                    b.Property<int?>("Specialty_ID")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("int");
 
                     b.Property<string>("Uuid")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Specialty_ID");
+
+                    b.HasIndex("Uuid")
+                        .IsUnique();
 
                     b.ToTable("Doctors");
                 });
@@ -103,9 +117,16 @@ namespace ClinicApplication.Migrations
 
                     b.Property<string>("Uuid")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Doctor_ID");
+
+                    b.HasIndex("Patient_ID");
+
+                    b.HasIndex("Uuid")
+                        .IsUnique();
 
                     b.ToTable("Medical_Records");
                 });
@@ -130,9 +151,12 @@ namespace ClinicApplication.Migrations
 
                     b.Property<string>("Uuid")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Uuid")
+                        .IsUnique();
 
                     b.ToTable("Patients");
                 });
@@ -155,14 +179,40 @@ namespace ClinicApplication.Migrations
 
                     b.Property<string>("Uuid")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("mdRecord_ID")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Uuid")
+                        .IsUnique();
+
+                    b.HasIndex("mdRecord_ID");
+
                     b.ToTable("Prescriptions");
+                });
+
+            modelBuilder.Entity("ClinicApplication.Models.Specialty", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Uuid")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Specialties");
                 });
 
             modelBuilder.Entity("ClinicApplication.Models.User", b =>
@@ -199,6 +249,81 @@ namespace ClinicApplication.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ClinicApplication.Models.Appointment", b =>
+                {
+                    b.HasOne("ClinicApplication.Models.Doctor", "Doctor")
+                        .WithMany("Appointments")
+                        .HasForeignKey("Doctor_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClinicApplication.Models.Patient", "Patient")
+                        .WithMany("Appointments")
+                        .HasForeignKey("Patient_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("ClinicApplication.Models.Doctor", b =>
+                {
+                    b.HasOne("ClinicApplication.Models.Specialty", "Specialty")
+                        .WithMany("Doctor")
+                        .HasForeignKey("Specialty_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Specialty");
+                });
+
+            modelBuilder.Entity("ClinicApplication.Models.Medical_Record", b =>
+                {
+                    b.HasOne("ClinicApplication.Models.Doctor", "Doctor")
+                        .WithMany()
+                        .HasForeignKey("Doctor_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClinicApplication.Models.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("Patient_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("ClinicApplication.Models.Prescription", b =>
+                {
+                    b.HasOne("ClinicApplication.Models.Medical_Record", "Medical_Record")
+                        .WithMany()
+                        .HasForeignKey("mdRecord_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Medical_Record");
+                });
+
+            modelBuilder.Entity("ClinicApplication.Models.Doctor", b =>
+                {
+                    b.Navigation("Appointments");
+                });
+
+            modelBuilder.Entity("ClinicApplication.Models.Patient", b =>
+                {
+                    b.Navigation("Appointments");
+                });
+
+            modelBuilder.Entity("ClinicApplication.Models.Specialty", b =>
+                {
+                    b.Navigation("Doctor");
                 });
 #pragma warning restore 612, 618
         }

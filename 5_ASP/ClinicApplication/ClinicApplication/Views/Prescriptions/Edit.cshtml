@@ -1,4 +1,5 @@
-﻿@model Prescription
+﻿@using ClinicApplication.Dtos
+@model PrescriptionUpdateDto
 @{
     ViewData["Title"] = "Edit Prescription";
 }
@@ -25,7 +26,13 @@
 
                         <div class="mb-3">
                             <label asp-for="mdRecord_ID" class="form-label fw-bold"></label>
-                            <input asp-for="mdRecord_ID" class="form-control" />
+                             <select asp-for="mdRecord_ID" class="form-control" asp-items="ViewBag.MRecords" disabled>
+                                <option value="">-- Select Medical Record --</option>
+
+                   
+                            </select>
+                            <input type="hidden" asp-for="mdRecord_ID" />
+
                             <span class="text-danger" asp-validation-for="mdRecord_ID"></span>
                         </div>
 

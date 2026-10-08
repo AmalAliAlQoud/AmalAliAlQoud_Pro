@@ -1,4 +1,5 @@
 using ClinicApplication.Data;
+using ClinicApplication.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,13 @@ var conectionString = builder.Configuration.GetConnectionString("DefaultConnecti
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 options.UseSqlServer(conectionString));
+
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
+
+builder.Services.AddScoped<ISpecialityRepository, SpecialtyRepository>();
+
+
 
 // ================================ 
 // Cookie Authentication 

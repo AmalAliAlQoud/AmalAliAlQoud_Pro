@@ -1,4 +1,5 @@
-﻿@model Doctor
+﻿@using ClinicApplication.Dtos
+@model DoctorCreateDto
 @{
     ViewData["Title"] = "Create Doctor";
 }
@@ -24,9 +25,14 @@
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="Specialty" class="form-label fw-bold"></label>
-                            <input asp-for="Specialty" class="form-control" placeholder="Enter medical specialty" />
-                            <span class="text-danger" asp-validation-for="Specialty"></span>
+                            <label asp-for="SpecialtyId" class="form-label fw-bold"></label>
+                            
+                            <select asp-for="SpecialtyId" class="form-control" asp-items="ViewBag.Specialty">
+                                <option value="">-- Select Specialty --</option>
+
+                   
+                            </select>
+                            <span class="text-danger" asp-validation-for="SpecialtyId"></span>
                         </div>
 
                         <div class="mb-3">

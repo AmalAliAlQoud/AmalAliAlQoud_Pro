@@ -22,5 +22,8 @@ namespace ClinicApplication.Models
         [DisplayName("Date of Birth")]
         public DateOnly Date_of_Birth {  get; set; } = DateOnly.FromDateTime(DateTime.Today);
 
+        // Navigation property for related Appointment
+        public ICollection<Appointment>? Appointments { get; set; }
+
     }
 }

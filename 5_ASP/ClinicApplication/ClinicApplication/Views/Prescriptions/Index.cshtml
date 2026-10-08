@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Prescription>
+﻿@using ClinicApplication.Dtos
+@model IEnumerable<PrescriptionDto>
 
 @{
     ViewData["Title"] = "Prescriptions";
@@ -25,7 +26,7 @@
                     <thead class="table-light">
                         <tr>
                             <th class="ps-3" style="width: 50px;">#</th>
-                            <th>Record ID</th>
+                            <th>Medical Record ID</th>
                             <th>Medicine Name</th>
                             <th>Dosage</th>
                             <th class="text-center" style="width: 200px;">Actions</th>

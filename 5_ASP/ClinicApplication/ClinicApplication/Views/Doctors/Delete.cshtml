@@ -1,4 +1,5 @@
-﻿@model Doctor
+﻿@using ClinicApplication.Dtos
+@model DoctorUpdateDto
 @{
     ViewData["Title"] = "Delete Doctor";
 }
@@ -29,8 +30,9 @@
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="Specialty" class="form-label fw-bold"></label>
-                            <input asp-for="Specialty" class="form-control bg-light" readonly />
+                            <label asp-for="SpecialtyId" class="form-label fw-bold"></label>
+                           <input  value="@Model.SpecialtyName" class="form-control" readonly />
+
                         </div>
 
                         <div class="mb-3">

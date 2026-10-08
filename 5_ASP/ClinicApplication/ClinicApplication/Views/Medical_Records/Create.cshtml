@@ -1,4 +1,5 @@
-﻿@model Medical_Record
+﻿@using ClinicApplication.Dtos
+@model Medical_RecordCreateDto
 @{
     ViewData["Title"] = "Create Medical Record";
 }
@@ -19,13 +20,17 @@
 
                         <div class="mb-3">
                             <label asp-for="Patient_ID" class="form-label fw-bold"></label>
-                            <input asp-for="Patient_ID" class="form-control" placeholder="Enter Patient ID" />
+                           <select asp-for="Patient_ID" class="form-control" asp-items="ViewBag.Patients">
+                                <option value="">-- Select Patien --</option>
+                          </select>
                             <span class="text-danger" asp-validation-for="Patient_ID"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Doctor_ID" class="form-label fw-bold"></label>
-                            <input asp-for="Doctor_ID" class="form-control" placeholder="Enter Doctor ID" />
+                            <select asp-for="Doctor_ID" class="form-control" asp-items="ViewBag.Doctors">
+                                <option value="">-- Select Doctor --</option>                                             
+                            </select>
                             <span class="text-danger" asp-validation-for="Doctor_ID"></span>
                         </div>
 

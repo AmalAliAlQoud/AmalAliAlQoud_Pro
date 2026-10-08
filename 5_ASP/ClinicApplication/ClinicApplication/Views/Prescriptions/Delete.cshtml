@@ -1,4 +1,5 @@
-﻿@model Prescription
+﻿@using ClinicApplication.Dtos
+@model PrescriptionDto
 @{
     ViewData["Title"] = "Delete Prescription";
 }
@@ -26,6 +27,7 @@
                         <div class="mb-3">
                             <label asp-for="mdRecord_ID" class="form-label fw-bold"></label>
                             <input asp-for="mdRecord_ID" class="form-control bg-light" readonly />
+
                         </div>
 
                         <div class="mb-3">

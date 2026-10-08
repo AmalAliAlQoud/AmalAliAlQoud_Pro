@@ -1,8 +1,9 @@
 ﻿using ClinicApplication.Data;
-using ClinicApplication.Migrations;
+using ClinicApplication.Migrations; 
 using ClinicApplication.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ClinicApplication.Repositories;
 
 namespace ClinicApplication.Controllers
 {
@@ -11,17 +12,23 @@ namespace ClinicApplication.Controllers
     public class PatientsController : Controller
     {
 
-        private readonly AppDbContext _db;
-        public PatientsController(AppDbContext db)
-        {
-            _db = db;
+       
+        private readonly IPatientRepository _PatientRepository;
 
+        public PatientsController(IPatientRepository patientRepository)
+        {
+            _PatientRepository = patientRepository;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            IEnumerable<Patient> patients = _db.Patients.ToList();
+            //IEnumerable<Patient> patients = _db.Patients.ToList();
+            //return View(patients);
+            IEnumerable<Patient> patients = await _PatientRepository.GetAllPatientAsync();
             return View(patients);
+
+          //  return View(await _categoryRepository.GetAllCategoriesAsync());
+
         }
         //===============
         //Create
@@ -34,12 +41,13 @@ namespace ClinicApplication.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Patient pat)
+        public async Task<ActionResult> Create(Patient pat)
         {
             if (ModelState.IsValid)
             {
-                _db.Patients.Add(pat);
-                _db.SaveChanges();
+                await _PatientRepository.AddPatientAsync(pat);
+                //_db.Patients.Add(pat);
+                //_db.SaveChanges();
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill all the required fields.");
@@ -50,9 +58,11 @@ namespace ClinicApplication.Controllers
         //Edit
         //==========================
         [HttpGet]
-        public ActionResult Edit(string Uuid)
+        public async Task<IActionResult> Edit(string Uuid)
         {
-            var pat = _db.Patients.FirstOrDefault(e => e.Uuid == Uuid);
+           
+
+            var pat = await _PatientRepository.GetPatientAsyncByIdAsync(Uuid);
 
             if (pat == null)
             {
@@ -61,26 +71,27 @@ namespace ClinicApplication.Controllers
 
             return View(pat);
         }
+       
 
         [HttpPost]
-        public ActionResult Edit(Patient pat)
+        public async Task<ActionResult> Edit(Patient pat)
         {
             if (ModelState.IsValid)
             {
-               
-               
-                    var oldPatient = _db.Patients.FirstOrDefault(e => e.Uuid == pat.Uuid);
 
-                    if (oldPatient == null)
+
+                // var oldPatient = _db.Patients.FirstOrDefault(e => e.Uuid == pat.Uuid);
+                var oldPatient= await _PatientRepository.GetPatientAsyncByIdAsync(pat.Uuid);
+
+                if (oldPatient == null)
                         return NotFound();
 
                     oldPatient.Name = pat.Name;
                     oldPatient.Phone = pat.Phone;
                     oldPatient.Date_of_Birth = pat.Date_of_Birth;
 
-
-               
-                    _db.SaveChanges();
+                //_db.SaveChanges();
+                await _PatientRepository.UpdatePatientAsync(oldPatient);
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill all the required fields.");
@@ -92,9 +103,10 @@ namespace ClinicApplication.Controllers
         //Delete
         //==========================
         [HttpGet]
-        public ActionResult Delete(string Uuid)
+        public async Task<ActionResult> Delete(string Uuid)
         {
-            var pat = _db.Patients.FirstOrDefault(e => e.Uuid == Uuid);
+           // var pat = _db.Patients.FirstOrDefault(e => e.Uuid == Uuid);
+            var pat = await _PatientRepository.GetPatientAsyncByIdAsync(Uuid);
             if (pat == null)
             {
                 return NotFound();
@@ -105,19 +117,21 @@ namespace ClinicApplication.Controllers
 
         [HttpPost]
         [ActionName("Delete")]
-        public ActionResult DeleteConfirm(string Uuid)
+        public async Task<ActionResult> DeleteConfirm(string Uuid)
         {
                          
-            var pat = _db.Patients.FirstOrDefault(e => e.Uuid == Uuid);
+           // var pat = _db.Patients.FirstOrDefault(e => e.Uuid == Uuid);
+            var pat = await _PatientRepository.GetPatientAsyncByIdAsync(Uuid);
             if (pat == null)
             {
                 return NotFound();
             }
 
+            //DeletePatientAsync
+            await _PatientRepository.DeletePatientAsync(Uuid);
 
-
-            _db.Patients.Remove(pat);
-            _db.SaveChanges();
+           // _db.Patients.Remove(pat);
+           // _db.SaveChanges();
             return RedirectToAction("Index");
 
 

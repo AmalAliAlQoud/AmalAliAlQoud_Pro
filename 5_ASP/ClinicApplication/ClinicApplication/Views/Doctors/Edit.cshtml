@@ -1,4 +1,5 @@
-﻿@model Doctor
+﻿@using ClinicApplication.Dtos
+@model DoctorUpdateDto
 @{
     ViewData["Title"] = "Edit Doctor";
 }
@@ -25,15 +26,18 @@
 
                         <div class="mb-3">
                             <label asp-for="Name" class="form-label fw-bold"></label>
-                            <input asp-for="Name" class="form-control" />
+                            <input asp-for="Name" class="form-control"  asp-items="ViewBag.Specialty" />
                             <span class="text-danger" asp-validation-for="Name"></span>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="Specialty" class="form-label fw-bold"></label>
-                            <input asp-for="Specialty" class="form-control" />
-                            <span class="text-danger" asp-validation-for="Specialty"></span>
+                            <label asp-for="SpecialtyId" class="form-label fw-bold">Specialty</label>
+                            <select asp-for="SpecialtyId" class="form-select" asp-items="ViewBag.Specialty">
+                                <option value="">-- Select Specialty --</option>
+                            </select>
+                            <span class="text-danger" asp-validation-for="SpecialtyId"></span>
                         </div>
+
 
                         <div class="mb-3">
                             <label asp-for="Phone" class="form-label fw-bold"></label>

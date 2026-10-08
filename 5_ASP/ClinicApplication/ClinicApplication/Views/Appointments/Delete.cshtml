@@ -1,4 +1,5 @@
-﻿@model Appointment
+﻿@using ClinicApplication.Dtos
+@model AppointmentUpdateDto
 @{
     ViewData["Title"] = "Delete Appointment";
 }
@@ -23,14 +24,25 @@
 
                         <div class="text-danger mb-3" asp-validation-summary="All"></div>
 
+                        
+
                         <div class="mb-3">
                             <label asp-for="Patient_ID" class="form-label fw-bold"></label>
-                            <input asp-for="Patient_ID" class="form-control bg-light" readonly />
+                            <select asp-for="Patient_ID" class="form-control" asp-items="ViewBag.Patients" readonly disabled>
+                                <option value="">-- Select Patient --</option>
+                            </select>
+                            <input type="hidden" asp-for="Patient_ID" />
+
                         </div>
+
 
                         <div class="mb-3">
                             <label asp-for="Doctor_ID" class="form-label fw-bold"></label>
-                            <input asp-for="Doctor_ID" class="form-control bg-light" readonly />
+                            <select asp-for="Doctor_ID" class="form-control" asp-items="ViewBag.Doctors" readonly disabled>
+                                <option value="">-- Select Doctor --</option>             
+                            </select>
+                            <input type="hidden" asp-for="Doctor_ID" />
+
                         </div>
 
                         <div class="mb-3">

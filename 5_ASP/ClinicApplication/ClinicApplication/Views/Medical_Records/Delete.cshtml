@@ -1,4 +1,5 @@
-﻿@model Medical_Record
+﻿@using ClinicApplication.Dtos
+@model Medical_RecordUpdateDto
 @{
     ViewData["Title"] = "Delete Medical Record";
 }
@@ -25,12 +26,14 @@
 
                         <div class="mb-3">
                             <label asp-for="Patient_ID" class="form-label fw-bold"></label>
-                            <input asp-for="Patient_ID" class="form-control bg-light" readonly />
+                            <input value="@Model.PatientName" class="form-control" readonly />
+                            <input type="hidden" asp-for="Patient_ID" />
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Doctor_ID" class="form-label fw-bold"></label>
-                            <input asp-for="Doctor_ID" class="form-control bg-light" readonly />
+                            <input  value="@Model.DoctorName"  class="form-control" readonly />
+                            <input type="hidden" asp-for="Doctor_ID" />
                         </div>
 
                         <div class="mb-3">

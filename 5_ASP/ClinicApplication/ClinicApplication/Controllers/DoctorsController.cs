@@ -1,118 +1,221 @@
 ﻿using ClinicApplication.Data;
+using ClinicApplication.Dtos;
 using ClinicApplication.Migrations;
 using ClinicApplication.Models;
+using ClinicApplication.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System.Numerics;
 
 namespace ClinicApplication.Controllers
 {
     public class DoctorsController : Controller
     {
 
-      
 
-        private readonly AppDbContext _db;
-        public DoctorsController(AppDbContext db)
+        private readonly IDoctorRepository _DoctorRepository;
+        private readonly ISpecialityRepository _specialtyRepository;
+
+        public DoctorsController(IDoctorRepository DoctorRepository, ISpecialityRepository specialtyRepository)
         {
-            _db = db;
+            _DoctorRepository = DoctorRepository;
+            _specialtyRepository = specialtyRepository;
+        }
+
+        //---------------------------------
+
+
+        private async Task  loadSpecialties() 
+        {
+           // var Specialties = _db.Specialties.ToList();
+           // var selectListSpecialties = await _SpecialtyRepository.GetAllSpecialtyAsync();
+            var specialties = await _specialtyRepository.GetAllSpecialtyAsync();
+            ViewBag.Specialty = new SelectList(specialties, "Id", "Name");
+            //SelectList selectListSpecialties = new SelectList(Specialties, "Id", "Name");
+
+            //ViewBag.Specialty = selectListSpecialties;
 
         }
-        public ActionResult Index()
+
+
+        public async Task<ActionResult> Index()
         {
-            IEnumerable<Doctor> Doctors = _db.Doctors.ToList();
+            var doctorsList = await _DoctorRepository.GetAllDoctorAsyncInclude();
+
+            var Doctors = doctorsList.Select(e => new DoctorDto 
+            {
+                 Id = e.Id,
+                 Uuid = e.Uuid,
+                 Name = e.Name,
+                 SpecialtyName = e.Specialty.Name,
+                // SpecialtyName = e.Specialty != null ? e.Specialty.Name : "null",
+                 Phone = e.Phone
+     })
+     .ToList();
+
             return View(Doctors);
+
         }
+
+      
         //===============
         //Create
         //==========================
 
         [HttpGet]
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
+            await loadSpecialties();
             return View();
         }
 
         [HttpPost]
-        public ActionResult Create(Doctor dr)
+        
+        public async Task<ActionResult> Create(DoctorCreateDto drDto)
         {
             if (ModelState.IsValid)
             {
-                _db.Doctors.Add(dr);
-                _db.SaveChanges();
+
+                var dr = new Doctor
+                {//(Name/	SpecialtyId/	Phone)
+
+                    Name = drDto.Name,
+                    Specialty_ID = drDto.SpecialtyId,
+                    Phone= drDto.Phone
+
+
+                };
+                await _DoctorRepository.AddDoctorAsync(dr);
+
+
+
+                //_db.Doctors.Add(dr);
+                //_db.SaveChanges();
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill all the required fields.");
-            return View(dr);
+            await loadSpecialties();
+
+            return View(drDto);
 
         }
+
+      
         //===============
         //Edit
         //==========================
         [HttpGet]
-        public ActionResult Edit(string Uuid)
+        public async Task<ActionResult> Edit(string Uuid)
         {
-            var dr = _db.Doctors.FirstOrDefault(e => e.Uuid == Uuid);
+            Doctor? dr = await _DoctorRepository.GetDoctorAsyncByIdAsync(Uuid);
+
+           // Doctor? dr = _db.Doctors.FirstOrDefault(e => e.Uuid == Uuid);
+
             if (dr == null)
             {
                 return NotFound();
             }
 
-            return View(dr);
+            var doctorDto = new DoctorUpdateDto
+            {
+                Id = dr.Id,
+                Uuid = dr.Uuid,
+                Name = dr.Name,
+                SpecialtyId = dr.Specialty_ID,  
+                Phone = dr.Phone
+            };
+
+            await loadSpecialties();
+            return View(doctorDto);
         }
 
         [HttpPost]
-        public ActionResult Edit(Doctor dr)
+        public async Task<ActionResult> Edit(DoctorUpdateDto drDto) 
+
         {
             if (ModelState.IsValid)
             {
-                var oldDoctor = _db.Doctors.FirstOrDefault(e => e.Uuid == dr.Uuid);
+
+                // var oldDoctor = _db.Doctors.FirstOrDefault(e => e.Uuid == drDto.Uuid);
+                var oldDoctor = await _DoctorRepository.GetDoctorAsyncByIdAsync(drDto.Uuid);
 
                 if (oldDoctor == null)
                     return NotFound();
 
-                oldDoctor.Name = dr.Name;
-                oldDoctor.Specialty = dr.Specialty;
-                oldDoctor.Phone = dr.Phone;
-               
-                //_db.Doctors.Update(dr);
-                _db.SaveChanges();
+                oldDoctor.Name = drDto.Name;
+                oldDoctor.Specialty_ID = drDto.SpecialtyId;
+                oldDoctor.Phone = drDto.Phone;
+
+                await _DoctorRepository.UpdateDoctorAsync(oldDoctor);
+
+               // _db.SaveChanges();
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill all the required fields.");
-            return View(dr);
+            await loadSpecialties();
+            return View(drDto);
 
         }
+       
 
         //===============
         //Delete
         //==========================
         [HttpGet]
-        public ActionResult Delete(string Uuid)
+
+        public async Task<ActionResult> Delete(string Uuid)
         {
-            var dr = _db.Doctors.FirstOrDefault(e => e.Uuid == Uuid);
+            //Doctor? dr = _db.Doctors.Include(d => d.Specialty).FirstOrDefault(e => e.Uuid == Uuid);
+            Doctor? dr = await _DoctorRepository.GetDoctorAsyncByIdAsyncInclude(Uuid);
+
+
             if (dr == null)
             {
                 return NotFound();
             }
+            var drDto = new DoctorUpdateDto
+            {
+                Id = dr.Id,
+                Uuid = dr.Uuid,
+                Name = dr.Name,
+                SpecialtyId = dr.Specialty_ID,
+                SpecialtyName = dr.Specialty != null ? dr.Specialty.Name : "null",
+                Phone = dr.Phone
 
-            return View(dr);
+            };
+
+
+           // loadSpecialties();
+
+
+            return View(drDto);
         }
-
+        
         [HttpPost]
         [ActionName("Delete")]
-        public ActionResult DeleteConfirm(string Uuid)
+             public async Task<ActionResult> DeleteConfirm(DoctorUpdateDto DrDto)
         {
-            var dr = _db.Doctors.FirstOrDefault(e => e.Uuid == Uuid);
+          //  var dr = _db.Doctors.FirstOrDefault(e => e.Uuid == DrDto.Uuid);
+            var dr = await _DoctorRepository.GetDoctorAsyncByIdAsync(DrDto.Uuid);
+
             if (dr == null)
             {
                 return NotFound();
             }
 
-            _db.Doctors.Remove(dr);
-            _db.SaveChanges();
+            await _DoctorRepository.UpdateDoctorAsync(dr);
+
+            //_db.Doctors.Remove(dr);
+            //_db.SaveChanges();
             return RedirectToAction("Index");
 
 
         }
+
+
+
+       
     }
 }

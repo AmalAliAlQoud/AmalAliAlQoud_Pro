@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace ClinicApplication.Models
 {
     [Index(nameof(Uuid), IsUnique = true)]
@@ -17,11 +18,22 @@ namespace ClinicApplication.Models
         public string Name { get; set; } = "";
 
 
+        
+
         [DisplayName("Specialty Name")]
-        [Required(ErrorMessage = "Name is required")]
-        public string Specialty { get; set; } = "";
+        [Required(ErrorMessage = "Specialty Name is required")]
+        [ForeignKey("Specialty")]
+        public int? Specialty_ID { get; set; }
+        public Specialty? Specialty { get; set; }
+
+
+
+
 
         public string? Phone { get; set; }
+
+        // Navigation property for related Appointment
+        public ICollection<Appointment>? Appointments { get; set; }
 
 
 
