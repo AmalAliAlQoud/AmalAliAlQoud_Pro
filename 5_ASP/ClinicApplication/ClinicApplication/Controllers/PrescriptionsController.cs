@@ -2,6 +2,7 @@
 using ClinicApplication.Dtos;
 using ClinicApplication.Migrations;
 using ClinicApplication.Models;
+using ClinicApplication.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,28 +14,33 @@ namespace ClinicApplication.Controllers
     public class PrescriptionsController : Controller
     {
 
-        private readonly AppDbContext _db;
-        public PrescriptionsController(AppDbContext db)
-        {
-            _db = db;
+        private readonly IPrescriptionsRepository _PrescriptionsRepository;//PrescriptionsRepository : IPrescriptionsRepository
+        private readonly IMedical_RecordsRepository _Medical_RecordsRepository;//Medical_RecordsRepository : IMedical_RecordsRepository
 
+        public PrescriptionsController(IPrescriptionsRepository PrescriptionsRepository, IMedical_RecordsRepository Medical_RecordsRepository)
+        {
+            _PrescriptionsRepository = PrescriptionsRepository;
+            _Medical_RecordsRepository = Medical_RecordsRepository;
         }
 
-        private void loadMeddicalRecord()
+        private async Task loadMeddicalRecord()
         {
-            var MRecords = _db.Medical_Records.ToList();
-            SelectList selectListMRecords = new SelectList(MRecords, "Id","Id");
-            ViewBag.MRecords = selectListMRecords;
+           
+
+            var MRecords = await _Medical_RecordsRepository.GetAllMedical_RecordAsync();
+            ViewBag.MRecords = new SelectList(MRecords, "Id", "Id");
 
         }
 
 
         //   Id  Uuid   mdRecord_ID     Medicine_Name  Dosage
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
+            var PreList = await _PrescriptionsRepository.GetAllPrescriptionAsyncInclude();
 
-            IEnumerable<PrescriptionDto> Prescriptions = _db.Prescriptions.Select(e=> new PrescriptionDto
+
+            var Prescription = PreList.Select(e => new PrescriptionDto
             {
 
                 Id=e.Id,
@@ -44,24 +50,19 @@ namespace ClinicApplication.Controllers
                 Dosage=e.Dosage
 
             }).ToList();
-            return View(Prescriptions);
+            return View(Prescription);
         }
 
-        //public ActionResult Index()
-        //{
-
-        //    IEnumerable<Prescription> Prescriptions = _db.Prescriptions.ToList();
-        //    return View(Prescriptions);
-        //}
+       
         //===============
         //Create
         //==========================
 
         [HttpGet]
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
 
-            loadMeddicalRecord();
+           await  loadMeddicalRecord();
             return View();
         }
 
@@ -78,8 +79,8 @@ namespace ClinicApplication.Controllers
 
                 };
 
-                _db.Prescriptions.Add(Pre);
-                _db.SaveChanges();
+               _PrescriptionsRepository.AddPrescriptionAsync(Pre); ;
+               
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill all the required fields.");
@@ -90,9 +91,9 @@ namespace ClinicApplication.Controllers
         //Edit
         //==========================
         [HttpGet]
-        public ActionResult Edit(string Uuid)
+        public async Task<ActionResult> Edit(string Uuid)
         {
-            Prescription? Pre = _db.Prescriptions.FirstOrDefault(e => e.Uuid == Uuid);
+            Prescription? Pre = await _PrescriptionsRepository.GetPrescriptionAsyncByIdAsync(Uuid);    
             if (Pre == null)
             {
                 return NotFound();
@@ -108,19 +109,19 @@ namespace ClinicApplication.Controllers
 
 
             };
-            loadMeddicalRecord();
+            await loadMeddicalRecord();
 
             return View(preDto);
         }
 
         [HttpPost]
-        public ActionResult Edit(PrescriptionUpdateDto PreDto)
+        public async Task<ActionResult> Edit(PrescriptionUpdateDto PreDto)
         {
 
 
             if (ModelState.IsValid)
             {
-                var OldPre = _db.Prescriptions.FirstOrDefault(e => e.Uuid == PreDto.Uuid);
+                var OldPre = await _PrescriptionsRepository.GetPrescriptionAsyncByIdAsync(PreDto.Uuid);
 
                 if (OldPre == null)
                     return NotFound();
@@ -132,8 +133,7 @@ namespace ClinicApplication.Controllers
 
 
 
-                //  _db.Prescriptions.Update(Pre);
-                _db.SaveChanges();
+                await _PrescriptionsRepository.UpdatePrescriptionAsync(OldPre);
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill all the required fields.");
@@ -145,9 +145,9 @@ namespace ClinicApplication.Controllers
         //Delete
         //==========================
         [HttpGet]
-        public ActionResult Delete(string Uuid)
+        public async Task<ActionResult> Delete(string Uuid)
         {
-            Prescription? Pre = _db.Prescriptions.FirstOrDefault(e => e.Uuid == Uuid);
+            Prescription? Pre = await _PrescriptionsRepository.GetPrescriptionAsyncByIdAsyncInclude(Uuid);
             if (Pre == null)
                return NotFound();
             var PreDto = new PrescriptionDto
@@ -160,7 +160,7 @@ namespace ClinicApplication.Controllers
 
             };
 
-            loadMeddicalRecord();
+           
 
 
             return View(PreDto);
@@ -168,16 +168,16 @@ namespace ClinicApplication.Controllers
 
         [HttpPost]
         [ActionName("Delete")]
-        public ActionResult DeleteConfirm(PrescriptionUpdateDto PreDto)
+        public async Task<ActionResult> DeleteConfirm(PrescriptionUpdateDto PreDto)
         {
-            Prescription? Pre = _db.Prescriptions.FirstOrDefault(e => e.Uuid == PreDto.Uuid);
+            Prescription? Pre = await _PrescriptionsRepository.GetPrescriptionAsyncByIdAsync(PreDto.Uuid);
                     if (Pre==null)
                          return NotFound();
 
 
+            _PrescriptionsRepository.DeletePrescriptionAsync(PreDto.Uuid);
 
-            _db.Prescriptions.Remove(Pre);
-            _db.SaveChanges();
+
             return RedirectToAction("Index");
 
 

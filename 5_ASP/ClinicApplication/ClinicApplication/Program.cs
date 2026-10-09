@@ -15,8 +15,12 @@ options.UseSqlServer(conectionString));
 
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
-
 builder.Services.AddScoped<ISpecialityRepository, SpecialtyRepository>();
+builder.Services.AddScoped<IMedical_RecordsRepository, Medical_RecordsRepository>();
+builder.Services.AddScoped<IPrescriptionsRepository, PrescriptionsRepository>();
+
+
+
 
 
 

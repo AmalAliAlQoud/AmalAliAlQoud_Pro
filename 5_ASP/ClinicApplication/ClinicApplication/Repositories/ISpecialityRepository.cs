@@ -4,7 +4,7 @@ using ClinicApplication.Models;
 
 namespace ClinicApplication.Repositories
 {
-    public interface ISpecialityRepository
+    public interface ISpecialityRepository  
     {
         Task<IEnumerable<Specialty>> GetAllSpecialtyAsync();
         Task<Specialty> GetSpecialtyAsyncByIdAsync(string uuid);

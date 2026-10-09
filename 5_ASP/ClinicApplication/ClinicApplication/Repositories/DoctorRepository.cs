@@ -55,7 +55,7 @@ namespace ClinicApplication.Repositories
             return doctor;
         }
 
-        public async Task<Doctor?> GetDoctorAsyncByIdAsyncInclude(string uuid)
+        public async Task<Doctor?> GetDoctorAsyncByIdAsyncInclude(string uuid) 
         {
             var doctor = await _db.Doctors
                 .Include(d => d.Specialty) 

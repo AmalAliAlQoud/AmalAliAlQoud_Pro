@@ -29,13 +29,10 @@ namespace ClinicApplication.Controllers
 
         private async Task  loadSpecialties() 
         {
-           // var Specialties = _db.Specialties.ToList();
-           // var selectListSpecialties = await _SpecialtyRepository.GetAllSpecialtyAsync();
+          
             var specialties = await _specialtyRepository.GetAllSpecialtyAsync();
             ViewBag.Specialty = new SelectList(specialties, "Id", "Name");
-            //SelectList selectListSpecialties = new SelectList(Specialties, "Id", "Name");
-
-            //ViewBag.Specialty = selectListSpecialties;
+          
 
         }
 
@@ -50,7 +47,7 @@ namespace ClinicApplication.Controllers
                  Uuid = e.Uuid,
                  Name = e.Name,
                  SpecialtyName = e.Specialty.Name,
-                // SpecialtyName = e.Specialty != null ? e.Specialty.Name : "null",
+               
                  Phone = e.Phone
      })
      .ToList();
@@ -89,10 +86,6 @@ namespace ClinicApplication.Controllers
                 };
                 await _DoctorRepository.AddDoctorAsync(dr);
 
-
-
-                //_db.Doctors.Add(dr);
-                //_db.SaveChanges();
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill all the required fields.");
@@ -111,7 +104,6 @@ namespace ClinicApplication.Controllers
         {
             Doctor? dr = await _DoctorRepository.GetDoctorAsyncByIdAsync(Uuid);
 
-           // Doctor? dr = _db.Doctors.FirstOrDefault(e => e.Uuid == Uuid);
 
             if (dr == null)
             {
@@ -138,7 +130,6 @@ namespace ClinicApplication.Controllers
             if (ModelState.IsValid)
             {
 
-                // var oldDoctor = _db.Doctors.FirstOrDefault(e => e.Uuid == drDto.Uuid);
                 var oldDoctor = await _DoctorRepository.GetDoctorAsyncByIdAsync(drDto.Uuid);
 
                 if (oldDoctor == null)
@@ -150,7 +141,7 @@ namespace ClinicApplication.Controllers
 
                 await _DoctorRepository.UpdateDoctorAsync(oldDoctor);
 
-               // _db.SaveChanges();
+              
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill all the required fields.");
@@ -167,7 +158,6 @@ namespace ClinicApplication.Controllers
 
         public async Task<ActionResult> Delete(string Uuid)
         {
-            //Doctor? dr = _db.Doctors.Include(d => d.Specialty).FirstOrDefault(e => e.Uuid == Uuid);
             Doctor? dr = await _DoctorRepository.GetDoctorAsyncByIdAsyncInclude(Uuid);
 
 
@@ -187,7 +177,7 @@ namespace ClinicApplication.Controllers
             };
 
 
-           // loadSpecialties();
+         
 
 
             return View(drDto);
@@ -197,7 +187,6 @@ namespace ClinicApplication.Controllers
         [ActionName("Delete")]
              public async Task<ActionResult> DeleteConfirm(DoctorUpdateDto DrDto)
         {
-          //  var dr = _db.Doctors.FirstOrDefault(e => e.Uuid == DrDto.Uuid);
             var dr = await _DoctorRepository.GetDoctorAsyncByIdAsync(DrDto.Uuid);
 
             if (dr == null)
@@ -205,7 +194,7 @@ namespace ClinicApplication.Controllers
                 return NotFound();
             }
 
-            await _DoctorRepository.UpdateDoctorAsync(dr);
+            await _DoctorRepository.DeleteDoctorAsync(DrDto.Uuid);
 
             //_db.Doctors.Remove(dr);
             //_db.SaveChanges();
