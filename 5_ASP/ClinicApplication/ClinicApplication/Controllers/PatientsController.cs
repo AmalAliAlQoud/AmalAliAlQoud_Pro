@@ -16,15 +16,6 @@ namespace ClinicApplication.Controllers
     {
 
 
-        //private readonly IUnitOfWork _unitOfWork;
-
-        //public PatientsController(IUnitOfWork unitOfWork)
-        //{
-        //    _unitOfWork = unitOfWork;
-
-
-        //}
-
 
         private readonly IPatientService _PatientService;
 

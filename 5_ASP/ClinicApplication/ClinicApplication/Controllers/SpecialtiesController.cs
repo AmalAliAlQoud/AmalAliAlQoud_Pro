@@ -2,6 +2,7 @@
 using ClinicApplication.Models;
 using ClinicApplication.Repositories;
 using ClinicApplication.Repositories.Base;
+using ClinicApplication.Services.Base;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicApplication.Controllers
@@ -9,27 +10,22 @@ namespace ClinicApplication.Controllers
     public class SpecialtiesController : Controller
     {
 
-        //private readonly ISpecialityRepository _specialtyRepository;
 
-        //public SpecialtiesController(ISpecialityRepository specialtyRepository)
-        //{
+        private readonly ISpecialtyService _SpecialtyService;
 
-        //    _specialtyRepository = specialtyRepository;
-        //}
-        private readonly IUnitOfWork _unitOfWork;
-
-        public SpecialtiesController(IUnitOfWork unitOfWork)
+        public SpecialtiesController(ISpecialtyService SpecialtyService)
         {
-            _unitOfWork = unitOfWork;
-
-
+            _SpecialtyService = SpecialtyService;
         }
+
+
+        //}
         public async Task<ActionResult> Index()
         {
             //IEnumerable<Specialty> Specialties = _db.Specialties.ToList();
             //return View(Specialties);
 
-            IEnumerable<Specialty> Specialties = await _unitOfWork.SpecialityRepository.GetAllSpecialtyAsync();
+            IEnumerable<Specialty> Specialties = await _SpecialtyService.GetAllSpecialty();
             return View(Specialties);
 
         }
@@ -50,7 +46,7 @@ namespace ClinicApplication.Controllers
             {
                 //_db.Specialties.Add(sp);
                 //_db.SaveChanges();
-                await _unitOfWork.SpecialityRepository.AddSpecialtyAsync(sp);
+                await _SpecialtyService.AddSpecialty(sp);
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill all the required fields.");
@@ -66,7 +62,7 @@ namespace ClinicApplication.Controllers
         {
 
            // var sp = _db.Specialties.FirstOrDefault(e => e.Uuid == Uuid);
-            var sp = await _unitOfWork.SpecialityRepository.GetSpecialtyAsyncByIdAsync(Uuid);
+            var sp = await _SpecialtyService.GetSpecialtyById(Uuid);
 
 
 
@@ -86,7 +82,7 @@ namespace ClinicApplication.Controllers
 
 
              //   var oldSpecialty = _db.Specialties.FirstOrDefault(e => e.Uuid == sp.Uuid);
-                var oldSpecialty = await _unitOfWork.SpecialityRepository.GetSpecialtyAsyncByIdAsync(sp.Uuid);
+                var oldSpecialty = await _SpecialtyService.GetSpecialtyById(sp.Uuid);
 
 
                 if (oldSpecialty == null)
@@ -98,7 +94,7 @@ namespace ClinicApplication.Controllers
 
 
                 //_db.SaveChanges();
-                await _unitOfWork.SpecialityRepository.UpdateSpecialtyAsync(oldSpecialty);
+                await _SpecialtyService.UpdateSpecialty(oldSpecialty);
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill all the required fields.");
@@ -113,7 +109,7 @@ namespace ClinicApplication.Controllers
         public async Task<ActionResult> Delete(string Uuid)
         {
             // var sp = _db.Specialties.FirstOrDefault(e => e.Uuid == Uuid);
-            var sp = await _unitOfWork.SpecialityRepository.GetSpecialtyAsyncByIdAsync(Uuid);
+            var sp = await _SpecialtyService.GetSpecialtyById(Uuid);
 
             if (sp == null)
             {
@@ -128,17 +124,16 @@ namespace ClinicApplication.Controllers
         public async Task<ActionResult> DeleteConfirm(string Uuid)
         {
             //var sp = _db.Specialties.FirstOrDefault(e => e.Uuid == Uuid);
-            var sp = await _unitOfWork.SpecialityRepository.GetSpecialtyAsyncByIdAsync(Uuid);
+            var sp = await _SpecialtyService.GetSpecialtyById(Uuid);
 
            
             if (sp == null)
                 return NotFound();
 
             //_specialtyRepository
-            await _unitOfWork.SpecialityRepository.DeleteSpecialtyAsync(Uuid);
+            await _SpecialtyService.DeleteSpecialty(Uuid);
 
-            //_db.Specialties.Remove(sp);
-            //_db.SaveChanges();
+           
             return RedirectToAction("Index");
 
 

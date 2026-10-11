@@ -19,7 +19,7 @@ namespace ClinicApplication.Services
 
         public async Task AddPatient(Patient patient)
         {
-            //  throw new NotImplementedException();
+          
             await _unitOfWork.PatientRepository.AddPatientAsync(patient);
         }
 
@@ -43,11 +43,7 @@ namespace ClinicApplication.Services
             return (patients);
         }
 
-        //public async Task<Patient> GetPatientAsyncById(string uuid)
-        //{
-        //   // throw new NotImplementedException();
-        //   return await _unitOfWork.PatientRepository.GetPatientById(uuid);
-        //}
+      
 
         public async Task<Patient> GetPatientById(string uuid)
         {
@@ -58,7 +54,7 @@ namespace ClinicApplication.Services
         public async Task UpdatePatient(Patient patient)
         {
            await  _unitOfWork.PatientRepository.UpdatePatient(patient);
-           // return _db.SaveChangesAsync();
+         
         }
         //------------------------
 
