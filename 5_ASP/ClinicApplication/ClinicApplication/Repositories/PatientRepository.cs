@@ -20,9 +20,9 @@ namespace ClinicApplication.Repositories
             return _db.SaveChangesAsync();
         }
 
-        public Task DeletePatientAsync(string Uuid) 
+        public Task DeletePatient(string Uuid) 
         {
-            // var patient = _context.Patients.Find(id);
+          
             var patient = _db.Patients.FirstOrDefault(e => e.Uuid == Uuid);
             if (patient != null)
             {
@@ -34,19 +34,19 @@ namespace ClinicApplication.Repositories
             return Task.CompletedTask;
         }
 
-        public async Task<IEnumerable<Patient>> GetAllPatientAsync()
+        public async Task<IEnumerable<Patient>> GetAllPatient()
         {
             IEnumerable<Patient> patients = await _db.Patients.ToListAsync();
             return patients;
         }
 
-        public async Task<Patient?> GetPatientAsyncByIdAsync(string Uuid)
+        public async Task<Patient?> GetPatientById(string Uuid)
         {
             var patient = await _db.Patients.FirstOrDefaultAsync(e => e.Uuid == Uuid);
             return patient;
         }
 
-        public Task UpdatePatientAsync(Patient patient)
+        public Task UpdatePatient(Patient patient)
         {
             _db.Patients.Update(patient);
             return _db.SaveChangesAsync();

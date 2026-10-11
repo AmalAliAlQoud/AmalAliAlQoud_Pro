@@ -34,7 +34,7 @@ namespace ClinicApplication.Controllers
         private async Task loadPatients()
         {
             //var Patients = _unitOfWork.Patients.ToList();
-            var Patients =await  _unitOfWork.PatientRepository.GetAllPatientAsync();
+            var Patients =await  _unitOfWork.PatientRepository.GetAllPatient();
             SelectList selectListPatient = new SelectList(Patients, "Id", "Name");
             ViewBag.Patients = selectListPatient;
 

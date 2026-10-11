@@ -4,10 +4,10 @@ namespace ClinicApplication.Repositories
 {
     public interface IPatientRepository 
     {
-        Task<IEnumerable<Patient>> GetAllPatientAsync();
-        Task<Patient> GetPatientAsyncByIdAsync(string uuid);
+        Task<IEnumerable<Patient>> GetAllPatient();
+        Task<Patient> GetPatientById(string uuid);
         Task AddPatientAsync(Patient patient);
-        Task UpdatePatientAsync(Patient patient);
-        Task DeletePatientAsync(string uuid);
+        Task UpdatePatient(Patient patient);
+        Task DeletePatient(string uuid);
     }
 }

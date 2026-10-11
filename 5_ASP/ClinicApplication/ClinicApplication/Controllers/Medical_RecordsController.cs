@@ -35,7 +35,7 @@ namespace ClinicApplication.Controllers
             //SelectList selectListPatient = new SelectList(Patients, "Id", "Name");
             //ViewBag.Patients = selectListPatient;
             //---------
-            var Patients = await _unitOfWork.PatientRepository.GetAllPatientAsync();
+            var Patients = await _unitOfWork.PatientRepository.GetAllPatient();
             ViewBag.Patients = new SelectList(Patients, "Id", "Name");
 
         }
