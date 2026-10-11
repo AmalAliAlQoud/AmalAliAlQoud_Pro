@@ -3,6 +3,7 @@ using ClinicApplication.Dtos;
 using ClinicApplication.Migrations;
 using ClinicApplication.Models;
 using ClinicApplication.Repositories;
+using ClinicApplication.Repositories.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,16 +14,20 @@ namespace ClinicApplication.Controllers
     public class Medical_RecordsController : Controller
     {
 
-        private readonly IMedical_RecordsRepository _Medical_RecordsRepository;//  : 
-        private readonly IDoctorRepository _DoctorRepository; 
-        private readonly IPatientRepository _PatientRepository; 
+        //private readonly IMedical_RecordsRepository _Medical_RecordsRepository;//  : 
+        //private readonly IDoctorRepository _DoctorRepository;
+        //private readonly IPatientRepository _PatientRepository;
 
-        public Medical_RecordsController(IMedical_RecordsRepository Medical_RecordsRepository, IDoctorRepository DoctorRepository, IPatientRepository PatientRepository )
+        private readonly IUnitOfWork _unitOfWork;
+
+        public Medical_RecordsController(IUnitOfWork unitOfWork)
         {
-            _Medical_RecordsRepository = Medical_RecordsRepository;
-            _DoctorRepository = DoctorRepository;
-            _PatientRepository = PatientRepository;
+            _unitOfWork = unitOfWork;
+
+
         }
+
+      
 
         private async Task loadPatients()
         {
@@ -30,7 +35,7 @@ namespace ClinicApplication.Controllers
             //SelectList selectListPatient = new SelectList(Patients, "Id", "Name");
             //ViewBag.Patients = selectListPatient;
             //---------
-            var Patients = await _PatientRepository.GetAllPatientAsync();
+            var Patients = await _unitOfWork.PatientRepository.GetAllPatientAsync();
             ViewBag.Patients = new SelectList(Patients, "Id", "Name");
 
         }
@@ -41,7 +46,7 @@ namespace ClinicApplication.Controllers
             //SelectList selectList = new SelectList(doctors, "Id", "Name");
             //ViewBag.Doctors = selectList;
             //-------------------
-            var doctors = await _DoctorRepository.GetAllDoctorAsync();
+            var doctors = await _unitOfWork.DoctorRepository.GetAllDoctorAsync();
             ViewBag.doctors = new SelectList(doctors, "Id", "Name");
 
         }
@@ -50,7 +55,7 @@ namespace ClinicApplication.Controllers
 
         public async Task<ActionResult> Index()
         {
-             var MdList = await _Medical_RecordsRepository.GetAllMedicalRecordAsyncInclude();
+             var MdList = await _unitOfWork.MMdical_RecordsRepository.GetAllMedicalRecordAsyncInclude();
 
             var Md = MdList.Select(e => new Medical_RecordDto
             {
@@ -101,7 +106,7 @@ namespace ClinicApplication.Controllers
                     Notes = mdDto.Notes,
 
                 };
-                await _Medical_RecordsRepository.AddMedical_RecordAsync(mRecord);
+                await _unitOfWork.MMdical_RecordsRepository.AddMedical_RecordAsync(mRecord);
 
                 return RedirectToAction("Index");
             }
@@ -121,7 +126,7 @@ namespace ClinicApplication.Controllers
         public async Task<ActionResult> Edit(string Uuid)
         {
             //   var md = _db.Medical_Records.FirstOrDefault(e => e.Uuid == Uuid);
-            Medical_Record? md = await _Medical_RecordsRepository.GetMedicalRecordAsyncByIdAsync(Uuid);
+            Medical_Record? md = await _unitOfWork.MMdical_RecordsRepository.GetMedicalRecordAsyncByIdAsync(Uuid);
 
             if (md == null)
             {
@@ -149,7 +154,7 @@ namespace ClinicApplication.Controllers
 
             if (ModelState.IsValid)
             {
-                var oldmd = await _Medical_RecordsRepository.GetMedicalRecordAsyncByIdAsync(mdDto.Uuid);
+                var oldmd = await _unitOfWork.MMdical_RecordsRepository.GetMedicalRecordAsyncByIdAsync(mdDto.Uuid);
 
                 oldmd.Patient_ID= mdDto.Patient_ID;
                 oldmd.Doctor_ID = mdDto.Doctor_ID;
@@ -157,7 +162,7 @@ namespace ClinicApplication.Controllers
                 oldmd.Notes = mdDto.Notes;
 
 
-                await _Medical_RecordsRepository.UpdateMedical_RecordAsync(oldmd);
+                await _unitOfWork.MMdical_RecordsRepository.UpdateMedical_RecordAsync(oldmd);
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill all the required fields.");
@@ -174,7 +179,7 @@ namespace ClinicApplication.Controllers
         [HttpGet]
         public async Task<ActionResult> Delete(string Uuid)
         {
-            Medical_Record? md = await _Medical_RecordsRepository.GetMedicalRecordAsyncByIdAsyncInclude(Uuid);
+            Medical_Record? md = await _unitOfWork.MMdical_RecordsRepository.GetMedicalRecordAsyncByIdAsyncInclude(Uuid);
             if (md == null)
             return NotFound();
 
@@ -199,13 +204,13 @@ namespace ClinicApplication.Controllers
         [ActionName("Delete")]
         public async Task<ActionResult> Deleteconfirm(Medical_RecordUpdateDto mdDto)
         {
-            var md = await _Medical_RecordsRepository.GetMedicalRecordAsyncByIdAsync(mdDto.Uuid);
+            var md = await _unitOfWork.MMdical_RecordsRepository.GetMedicalRecordAsyncByIdAsync(mdDto.Uuid);
 
             if (md == null)
             {
                 return NotFound();
             }
-            await _Medical_RecordsRepository.DeleteMedical_RecordAsync(mdDto.Uuid);
+            await _unitOfWork.MMdical_RecordsRepository.DeleteMedical_RecordAsync(mdDto.Uuid);
            
             return RedirectToAction("Index");
 

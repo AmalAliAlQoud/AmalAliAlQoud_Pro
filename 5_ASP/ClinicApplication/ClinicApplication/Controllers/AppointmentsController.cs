@@ -2,6 +2,7 @@
 using ClinicApplication.Dtos;
 using ClinicApplication.Migrations;
 using ClinicApplication.Models;
+using ClinicApplication.Repositories.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,46 +15,58 @@ namespace ClinicApplication.Controllers
 
     public class AppointmentsController : Controller
     {
-        private readonly AppDbContext _db;
-        public AppointmentsController(AppDbContext db)
+        //private readonly AppDbContext _db;
+        //public AppointmentsController(AppDbContext db)
+        //{
+        //    _db = db;
+
+        //}
+
+        private readonly IUnitOfWork _unitOfWork;
+
+        public AppointmentsController(IUnitOfWork unitOfWork)
         {
-            _db = db;
+            _unitOfWork = unitOfWork;
 
         }
 
 
-        private void loadPatients()
+        private async Task loadPatients()
         {
-            var Patients = _db.Patients.ToList();
+            //var Patients = _unitOfWork.Patients.ToList();
+            var Patients =await  _unitOfWork.PatientRepository.GetAllPatientAsync();
             SelectList selectListPatient = new SelectList(Patients, "Id", "Name");
             ViewBag.Patients = selectListPatient;
 
         }
 
-        private void loadDoctors()
+        private async Task loadDoctors()
         {
-            var doctors = _db.Doctors.ToList();
+            var doctors = await _unitOfWork.DoctorRepository.GetAllDoctorAsync();
             SelectList selectList = new SelectList(doctors, "Id", "Name");
             ViewBag.Doctors = selectList;
 
         }
 
-        public  ActionResult Index()
+        public async Task<ActionResult> Index()
         {
 
-            IEnumerable<AppointmentDto> Appointments = _db.Appointments.Select(e => new AppointmentDto {
-                //mappingh from appointment to AppointmentDto
+
+             var appsList  = await _unitOfWork.ApointmentRepository.GetAllAppointmentAsyncInclude();
+            var apps = appsList.Select(e => new AppointmentDto
+            {
 
                 Id = e.Id,
-                Uuid=e.Uuid,
-                PatientName =e.Patient != null ? e.Patient.Name : null,
-                DoctorName = e.Doctor != null ? e.Doctor.Name : null,
+                Uuid = e.Uuid,
+                PatientName = e.Patient.Name,
+                DoctorName = e.Doctor.Name,
                 Date = e.Date,
-                Time=e.Time,
+                Time = e.Time,
 
-                 }).ToList();
+            })
+     .ToList();
 
-            return View(Appointments);
+            return View(apps);
 
         }
 
@@ -63,19 +76,19 @@ namespace ClinicApplication.Controllers
         //==========================
 
         [HttpGet]
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
 
 
-            loadDoctors();
-            loadPatients();
+            await loadDoctors();
+            await loadPatients();
 
             return View();
         }
 
       
         [HttpPost]
-        public ActionResult Create(AppointmentCreateDto AppountmentDTO)
+        public async Task<ActionResult> Create(AppointmentCreateDto AppountmentDTO)
         {
             if (ModelState.IsValid)
             {
@@ -90,13 +103,12 @@ namespace ClinicApplication.Controllers
                     Time = AppountmentDTO.Time,
                 };
 
-                _db.Appointments.Add(appointment);
-                _db.SaveChanges();
+                await _unitOfWork.ApointmentRepository.AddAppointmentAsync(appointment);    
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill all the required fields.");
-            loadDoctors();
-            loadPatients();
+            await loadDoctors();
+            await loadPatients();
             return View(AppountmentDTO);
 
         }
@@ -105,9 +117,9 @@ namespace ClinicApplication.Controllers
         //Edit
         //==========================
         [HttpGet]
-        public ActionResult Edit(string Uuid)
+        public async Task<ActionResult> Edit(string Uuid)
         { // AppointmentUpdateDto
-            Appointment? app = _db.Appointments.FirstOrDefault(e => e.Uuid == Uuid);
+            Appointment? app = await _unitOfWork.ApointmentRepository.GetAppointmentAsyncByIdAsync(Uuid);
             if (app == null)
             {
                 return NotFound();
@@ -125,20 +137,20 @@ namespace ClinicApplication.Controllers
 
             };
 
-            loadDoctors();
-            loadPatients();
+            await loadDoctors();
+            await loadPatients();
 
 
             return View(appDto);
         }
 
         [HttpPost]
-        public ActionResult Edit(AppointmentUpdateDto appDto)
+        public async Task<ActionResult> Edit(AppointmentUpdateDto appDto)
         {
             if (ModelState.IsValid)
             {
 
-                var oldApp = _db.Appointments.FirstOrDefault(e => e.Uuid == appDto.Uuid);
+                var oldApp = await _unitOfWork.ApointmentRepository.GetAppointmentAsyncByIdAsync(appDto.Uuid);
 
                 if (oldApp == null)
                     return NotFound();
@@ -149,15 +161,16 @@ namespace ClinicApplication.Controllers
                   oldApp.Doctor_ID = appDto.Doctor_ID;
                   oldApp.Date = appDto.Date;
                   oldApp.Time = appDto.Time;
-                  
+
 
 
                 // _db.Appointments.Update(app);
-                _db.SaveChanges();
+                await _unitOfWork.ApointmentRepository.UpdateAppointmentAsync(oldApp);
+               
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill all the required fields.");
-            loadDoctors();
+            await loadDoctors();
             return View(appDto);
 
         }
@@ -166,11 +179,12 @@ namespace ClinicApplication.Controllers
         //Delete
         //==========================
         [HttpGet]
-        public ActionResult Delete(string Uuid)
+        public async Task<ActionResult> Delete(string Uuid)
         {
-            Appointment? app = _db.Appointments.Include(d => d.Patient).Include(d => d.Doctor).FirstOrDefault(e => e.Uuid == Uuid);
+            //Appointment? app = _db.Appointments.Include(d => d.Patient).Include(d => d.Doctor).FirstOrDefault(e => e.Uuid == Uuid);
+            Appointment? app = await _unitOfWork.ApointmentRepository.GetAppointmentAsyncByIdAsync(Uuid);
 
-           // var app = _db.Appointments.FirstOrDefault(e => e.Uuid == Uuid);
+            // var app = _db.Appointments.FirstOrDefault(e => e.Uuid == Uuid);
             if (app == null)
             {
                 return NotFound();
@@ -185,8 +199,8 @@ namespace ClinicApplication.Controllers
                 Time = app.Time,
             };
 
-            loadDoctors();
-            loadPatients();
+            await loadDoctors();
+            await loadPatients();
 
             return View(appDto);
         }
@@ -194,15 +208,14 @@ namespace ClinicApplication.Controllers
         [HttpPost]
         [ActionName("Delete")]
       
-        public ActionResult DeleteConfirm(AppointmentUpdateDto appDto)
+        public async Task<ActionResult> DeleteConfirm(AppointmentUpdateDto appDto)
         {
-            var app = _db.Appointments.FirstOrDefault(e => e.Uuid == appDto.Uuid);
+            var app = await _unitOfWork.ApointmentRepository.GetAppointmentAsyncByIdAsync(appDto.Uuid);
             if (app == null)
                 return NotFound();
 
 
-            _db.Appointments.Remove(app);
-            _db.SaveChanges();
+            await _unitOfWork.ApointmentRepository.DeleteAppointmentAsync(appDto.Uuid);
             return RedirectToAction("Index");
 
 

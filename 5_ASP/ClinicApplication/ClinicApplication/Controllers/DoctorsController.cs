@@ -3,6 +3,7 @@ using ClinicApplication.Dtos;
 using ClinicApplication.Migrations;
 using ClinicApplication.Models;
 using ClinicApplication.Repositories;
+using ClinicApplication.Repositories.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,13 +16,14 @@ namespace ClinicApplication.Controllers
     {
 
 
-        private readonly IDoctorRepository _DoctorRepository;
-        private readonly ISpecialityRepository _specialtyRepository;
+       
 
-        public DoctorsController(IDoctorRepository DoctorRepository, ISpecialityRepository specialtyRepository)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public DoctorsController(IUnitOfWork unitOfWork)
         {
-            _DoctorRepository = DoctorRepository;
-            _specialtyRepository = specialtyRepository;
+            _unitOfWork = unitOfWork;
+
         }
 
         //---------------------------------
@@ -30,7 +32,7 @@ namespace ClinicApplication.Controllers
         private async Task  loadSpecialties() 
         {
           
-            var specialties = await _specialtyRepository.GetAllSpecialtyAsync();
+            var specialties = await _unitOfWork.SpecialityRepository.GetAllSpecialtyAsync();
             ViewBag.Specialty = new SelectList(specialties, "Id", "Name");
           
 
@@ -39,7 +41,7 @@ namespace ClinicApplication.Controllers
 
         public async Task<ActionResult> Index()
         {
-            var doctorsList = await _DoctorRepository.GetAllDoctorAsyncInclude();
+            var doctorsList = await _unitOfWork.DoctorRepository.GetAllDoctorAsyncInclude();
 
             var Doctors = doctorsList.Select(e => new DoctorDto 
             {
@@ -84,7 +86,7 @@ namespace ClinicApplication.Controllers
 
 
                 };
-                await _DoctorRepository.AddDoctorAsync(dr);
+                await _unitOfWork.DoctorRepository.AddDoctorAsync(dr);
 
                 return RedirectToAction("Index");
             }
@@ -102,7 +104,7 @@ namespace ClinicApplication.Controllers
         [HttpGet]
         public async Task<ActionResult> Edit(string Uuid)
         {
-            Doctor? dr = await _DoctorRepository.GetDoctorAsyncByIdAsync(Uuid);
+            Doctor? dr = await _unitOfWork.DoctorRepository.GetDoctorAsyncByIdAsync(Uuid);
 
 
             if (dr == null)
@@ -130,7 +132,7 @@ namespace ClinicApplication.Controllers
             if (ModelState.IsValid)
             {
 
-                var oldDoctor = await _DoctorRepository.GetDoctorAsyncByIdAsync(drDto.Uuid);
+                var oldDoctor = await _unitOfWork.DoctorRepository.GetDoctorAsyncByIdAsync(drDto.Uuid);
 
                 if (oldDoctor == null)
                     return NotFound();
@@ -139,7 +141,7 @@ namespace ClinicApplication.Controllers
                 oldDoctor.Specialty_ID = drDto.SpecialtyId;
                 oldDoctor.Phone = drDto.Phone;
 
-                await _DoctorRepository.UpdateDoctorAsync(oldDoctor);
+                await _unitOfWork.DoctorRepository.UpdateDoctorAsync(oldDoctor);
 
               
                 return RedirectToAction("Index");
@@ -158,7 +160,7 @@ namespace ClinicApplication.Controllers
 
         public async Task<ActionResult> Delete(string Uuid)
         {
-            Doctor? dr = await _DoctorRepository.GetDoctorAsyncByIdAsyncInclude(Uuid);
+            Doctor? dr = await _unitOfWork.DoctorRepository.GetDoctorAsyncByIdAsyncInclude(Uuid);
 
 
             if (dr == null)
@@ -187,17 +189,16 @@ namespace ClinicApplication.Controllers
         [ActionName("Delete")]
              public async Task<ActionResult> DeleteConfirm(DoctorUpdateDto DrDto)
         {
-            var dr = await _DoctorRepository.GetDoctorAsyncByIdAsync(DrDto.Uuid);
+            var dr = await _unitOfWork.DoctorRepository.GetDoctorAsyncByIdAsync(DrDto.Uuid);
 
             if (dr == null)
             {
                 return NotFound();
             }
 
-            await _DoctorRepository.DeleteDoctorAsync(DrDto.Uuid);
+            await _unitOfWork.DoctorRepository.DeleteDoctorAsync(DrDto.Uuid);
 
-            //_db.Doctors.Remove(dr);
-            //_db.SaveChanges();
+           
             return RedirectToAction("Index");
 
 

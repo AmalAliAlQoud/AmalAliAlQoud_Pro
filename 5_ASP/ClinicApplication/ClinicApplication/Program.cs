@@ -1,5 +1,6 @@
 using ClinicApplication.Data;
 using ClinicApplication.Repositories;
+using ClinicApplication.Repositories.Base;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,11 @@ builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
 builder.Services.AddScoped<ISpecialityRepository, SpecialtyRepository>();
 builder.Services.AddScoped<IMedical_RecordsRepository, Medical_RecordsRepository>();
 builder.Services.AddScoped<IPrescriptionsRepository, PrescriptionsRepository>();
+builder.Services.AddScoped<IApointmentRepository, ApointmentRepository>();
+
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 
 
 
