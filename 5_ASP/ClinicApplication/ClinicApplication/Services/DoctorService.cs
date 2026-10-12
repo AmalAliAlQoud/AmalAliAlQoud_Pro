@@ -101,16 +101,7 @@ namespace ClinicApplication.Services
                 existingDoctor.Phone = drDto.Phone;
                 await _unitOfWork.DoctorRepository.UpdateDoctorAsync(existingDoctor);
             }
-                //    var dr = new Doctor
-                //{
-
-                //    Name = drDto.Name,
-                //    Specialty_ID = drDto.SpecialtyId,
-                //    Phone = drDto.Phone
-
-
-                //};
-                //await _unitOfWork.DoctorRepository.UpdateDoctorAsync(dr);
+                
             }
     }
 }

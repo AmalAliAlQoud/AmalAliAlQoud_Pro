@@ -9,7 +9,7 @@ namespace ClinicApplication.Dtos
         public int Id { get; set; }
 
         public string Uuid { get; set; }
-        public string? PatientName { get; set; } = string.Empty;
+        public string? PatientName { get; set; } = string.Empty; 
 
         public string? DoctorName { get; set; } = string.Empty;
 
@@ -22,7 +22,7 @@ namespace ClinicApplication.Dtos
 
     public class AppointmentCreateDto
     {
-        // put the data only we need in page  (PatientId /	DoctorId	/Date	/Time)
+        // put the data only we need in page  (PatientId /	DoctorId	/Date	/Time) Id Uuid
 
         public int? Patient_ID { get; set; } 
 

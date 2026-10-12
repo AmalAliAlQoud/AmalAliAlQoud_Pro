@@ -19,16 +19,9 @@ namespace ClinicApplication.Controllers
 
 
 
-        //private readonly IUnitOfWork _unitOfWork;
-
-        //public DoctorsController(IUnitOfWork unitOfWork)
-        //{
-        //    _unitOfWork = unitOfWork;
-
-        //}
 
         //---------------------------------
-        private readonly IDoctorService _DoctorService;
+        private readonly IDoctorService _DoctorService; 
         private readonly ISpecialtyService _SpecialtyService;
 
         public DoctorsController(IDoctorService DoctorService, ISpecialtyService SpecialtyService)
@@ -112,13 +105,6 @@ namespace ClinicApplication.Controllers
 
                 await _DoctorService.UpdateDoctor(drDto);
 
-                //if (oldDoctor == null)
-                //    return NotFound();
-
-                //oldDoctor.Name = drDto.Name;
-                //oldDoctor.Specialty_ID = drDto.SpecialtyId;
-                //oldDoctor.Phone = drDto.Phone;
-
               
 
               
@@ -140,24 +126,6 @@ namespace ClinicApplication.Controllers
         {
             var dr = await _DoctorService.GetDoctorById(Uuid);
 
-
-            //if (dr == null)
-            //{
-            //    return NotFound();
-            //}
-            //var drDto = new DoctorUpdateDto
-            //{
-            //    Id = dr.Id,
-            //    Uuid = dr.Uuid,
-            //    Name = dr.Name,
-            //    SpecialtyId = dr.Specialty_ID,
-            //    SpecialtyName = dr.Specialty != null ? dr.Specialty.Name : "null",
-            //    Phone = dr.Phone
-
-            //};
-
-
-         
 
 
             return View(dr);
