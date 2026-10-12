@@ -49,18 +49,7 @@ namespace ClinicApplication.Services
 
         public async Task<IEnumerable<AppointmentDto>> GetAllApps()
         {
-        //    var doctors = await _unitOfWork.DoctorRepository
-        //       .GetAllDoctorAsyncInclude();
-        //    return doctors.Select(e => new DoctorDto
-        //    {
-        //        Id = e.Id,
-        //        Uuid = e.Uuid,
-        //        Name = e.Name,
-        //        SpecialtyName = e.Specialty.Name,
-
-        //        Phone = e.Phone
-        //    });
-        //}
+      
 
         var apps = await _unitOfWork.ApointmentRepository.GetAllAppointmentAsyncInclude();
             return apps.Select(e => new AppointmentDto

@@ -26,15 +26,25 @@
 
                         <div class="mb-3">
                             <label asp-for="Patient_ID" class="form-label fw-bold"></label>
-                            <input value="@Model.PatientName" class="form-control" readonly />
+                            <select asp-for="Patient_ID" class="form-control" asp-items="ViewBag.Patients" readonly disabled>
+                                <option value="">-- Select Patient --</option>
+                            </select>
                             <input type="hidden" asp-for="Patient_ID" />
+
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Doctor_ID" class="form-label fw-bold"></label>
-                            <input  value="@Model.DoctorName"  class="form-control" readonly />
+                            <select asp-for="Doctor_ID" class="form-control" asp-items="ViewBag.Doctors" readonly disabled>
+                                <option value="">-- Select Doctor --</option>
+                            </select>
                             <input type="hidden" asp-for="Doctor_ID" />
+
                         </div>
+
+                       
+
+
 
                         <div class="mb-3">
                             <label asp-for="Diagnosis" class="form-label fw-bold"></label>
