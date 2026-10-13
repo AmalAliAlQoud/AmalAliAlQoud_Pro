@@ -30,6 +30,8 @@ builder.Services.AddScoped<ISpecialtyService, SpecialtyService>();
 builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IMedical_RecordsService, Medical_RecordsService>();
+builder.Services.AddScoped<IPrescriptionsService, PrescriptionsService>();
+
 
 
 

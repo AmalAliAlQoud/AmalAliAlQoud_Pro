@@ -5,7 +5,7 @@ using ClinicApplication.Services.Base;
 
 namespace ClinicApplication.Services
 {
-    public class AppointmentService: IAppointmentService
+    public class AppointmentService: IAppointmentService //
 
     {
         private readonly IUnitOfWork _unitOfWork;
