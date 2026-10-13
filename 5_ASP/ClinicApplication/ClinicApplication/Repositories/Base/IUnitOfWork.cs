@@ -9,9 +9,11 @@
         ISpecialityRepository SpecialityRepository { get; }
         IApointmentRepository ApointmentRepository { get; }
 
-       
+        IUserRepository UserRepository { get; }
 
-    
-    
+
+
+
+
     }
 }

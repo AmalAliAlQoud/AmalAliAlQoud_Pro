@@ -15,6 +15,8 @@ namespace ClinicApplication.Repositories.Base
             PrescriptionsRepository = new PrescriptionsRepository(db);
             SpecialityRepository = new SpecialtyRepository(db);
             ApointmentRepository = new ApointmentRepository(db);
+            UserRepository = new UserRepository(db);
+
 
         }
         public IPatientRepository PatientRepository { get; }
@@ -28,5 +30,9 @@ namespace ClinicApplication.Repositories.Base
         public ISpecialityRepository SpecialityRepository { get; }
 
         public IApointmentRepository ApointmentRepository { get; }
+
+       
+
+        public IUserRepository UserRepository { get; }
     }
 }

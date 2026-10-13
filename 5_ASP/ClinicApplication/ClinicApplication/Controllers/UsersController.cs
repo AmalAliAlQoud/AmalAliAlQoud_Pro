@@ -1,6 +1,8 @@
 ﻿using ClinicApplication.Data;
 using ClinicApplication.Migrations;
 using ClinicApplication.Models;
+using ClinicApplication.Services;
+using ClinicApplication.Services.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,36 +12,44 @@ namespace ClinicApplication.Controllers
     [Authorize]
     public class UsersController : Controller
     {
-        private readonly AppDbContext _db;
+        //private readonly AppDbContext _db;
 
-        public UsersController(AppDbContext db)
+        //public UsersController(AppDbContext db)
+        //{
+        //    _db = db;
+        //}
+        private readonly IUserService _UserService;
+
+        public UsersController(IUserService UserService)
         {
-            _db = db;
+            _UserService = UserService;
         }
 
         // =========================
         // Index
         // =========================
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var users = _db.Users.ToList();
+            //var users = _db.Users.ToList();
 
+            //return View(users);
+            IEnumerable<User> users = await _UserService.GetAllUser();
             return View(users);
-         
+
         }
 
         // =========================
         // Details
         // =========================
-        public IActionResult Details(string Uuid)
-        {
-            var user = _db.Users.Find(Uuid);
+        //public IActionResult Details(string Uuid)
+        //{
+        //    var user = _db.Users.Find(Uuid);
 
-            if (user == null)
-                return NotFound();
+        //    if (user == null)
+        //        return NotFound();
 
-            return View(user);
-        }
+        //    return View(user);
+        //}
 
 
         // =========================
@@ -54,19 +64,29 @@ namespace ClinicApplication.Controllers
         // Create POST
         // =========================
         [HttpPost]
-        public IActionResult Create(User user)
+        public async Task<IActionResult> Create(User user)
         {
+            //if (ModelState.IsValid)
+            //{
+
+            //    user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+
+            //    _db.Users.Add(user);
+            //    _db.SaveChanges();
+
+            //    return RedirectToAction("Index");
+            //}
+
+            //return View(user);
             if (ModelState.IsValid)
             {
-
                 user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
-                _db.Users.Add(user);
-                _db.SaveChanges();
+                await _UserService.AddUser(user);
 
                 return RedirectToAction("Index");
             }
-
+            ModelState.AddModelError("", "Please fill all the required fields.");
             return View(user);
         }
 
@@ -74,12 +94,20 @@ namespace ClinicApplication.Controllers
         // =========================
         // Edit GET
         // =========================
-        public IActionResult Edit(string Uuid)
+        public async Task<IActionResult> Edit(string Uuid)
         {
-            var user = _db.Users.FirstOrDefault(e => e.Uuid == Uuid);
+            //var user = _db.Users.FirstOrDefault(e => e.Uuid == Uuid);
+
+            //if (user == null)
+            //    return NotFound();
+
+            //return View(user);
+            var user = await _UserService.GetUserById(Uuid);//
 
             if (user == null)
+            {
                 return NotFound();
+            }
 
             return View(user);
         }
@@ -89,46 +117,76 @@ namespace ClinicApplication.Controllers
         // Edit POST
         // =========================
         [HttpPost]
-        public IActionResult Edit(User user)
+        public async Task<IActionResult> Edit(User user)
         {
             if (ModelState.IsValid)
             {
-
-                var oldUser = _db.Users.FirstOrDefault(e => e.Uuid == user.Uuid);
-
-
+                var oldUser = await _UserService.GetUserById(user.Uuid);
 
                 if (oldUser == null)
                     return NotFound();
-
-                if (!string.IsNullOrEmpty(user.Password) )
-                {
-
+                if (!string.IsNullOrEmpty(user.Password))
+                    //    {
                     oldUser.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-                    oldUser.Name = user.Name;
-                    oldUser.UserName = user.UserName;
-                    oldUser.Email = user.Email;
-
-                }
-
-                _db.SaveChanges();
+                oldUser.Name = user.Name;
+                oldUser.UserName = user.UserName;
+                oldUser.Email = user.Email;
+                oldUser.IsLocked = user.IsLocked;
+                //_db.SaveChanges();
+                await _UserService.UpdateUser(oldUser);
 
                 return RedirectToAction("Index");
+            
             }
-
-            return View(user);
+            ModelState.AddModelError("", "Please fill all the required fields.");
+            return View(user); 
+        
         }
+            //--------------
+
+            //var oldUser = _db.Users.FirstOrDefault(e => e.Uuid == user.Uuid);
+
+
+
+            //    if (oldUser == null)
+            //        return NotFound();
+
+            //    if (!string.IsNullOrEmpty(user.Password) )
+            //    {
+
+            //        oldUser.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            //        oldUser.Name = user.Name;
+            //        oldUser.UserName = user.UserName;
+            //        oldUser.Email = user.Email;
+
+            //    }
+
+            //    _db.SaveChanges();
+
+            //    return RedirectToAction("Index");
+            //}
+
+            //return View(user);
+        
 
 
         // =========================
         // Delete GET
         // =========================
-        public IActionResult Delete(string Uuid)
+        public async Task<IActionResult> Delete(string Uuid)
         {
-            var user = _db.Users.FirstOrDefault(e => e.Uuid == Uuid);
+            //var user = _db.Users.FirstOrDefault(e => e.Uuid == Uuid);
 
+            //if (user == null)
+            //    return NotFound();
+
+            //return View(user);
+
+            var user = await _UserService.GetUserById(Uuid);
             if (user == null)
+            {
                 return NotFound();
+            }
 
             return View(user);
         }
@@ -139,16 +197,27 @@ namespace ClinicApplication.Controllers
         [HttpPost]
         [ActionName("Delete")]
 
-        public IActionResult DeleteConfirm(string Uuid)
+        public async Task<IActionResult> DeleteConfirm(string Uuid)
         {
-            var user = _db.Users.FirstOrDefault(e => e.Uuid == Uuid);
+            //var user = _db.Users.FirstOrDefault(e => e.Uuid == Uuid);
 
+            //if (user == null)
+            //    return NotFound();
+
+            //_db.Users.Remove(user);
+            //_db.SaveChanges();
+
+            //return RedirectToAction("Index");
+            var user = await _UserService.GetUserById(Uuid);
             if (user == null)
+            {
                 return NotFound();
+            }
 
-            _db.Users.Remove(user);
-            _db.SaveChanges();
+            //DeletePatientAsync
+            await _UserService.DeleteUser(Uuid);
 
+           
             return RedirectToAction("Index");
         }
     }

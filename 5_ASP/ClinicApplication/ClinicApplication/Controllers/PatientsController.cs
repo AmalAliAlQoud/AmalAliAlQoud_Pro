@@ -82,7 +82,6 @@ namespace ClinicApplication.Controllers
             {
 
 
-                // var oldPatient = _db.Patients.FirstOrDefault(e => e.Uuid == pat.Uuid);
                 var oldPatient = await _PatientService.GetPatientById(pat.Uuid);
 
                 if (oldPatient == null)

@@ -22,6 +22,9 @@ builder.Services.AddScoped<ISpecialityRepository, SpecialtyRepository>();
 builder.Services.AddScoped<IMedical_RecordsRepository, Medical_RecordsRepository>();
 builder.Services.AddScoped<IPrescriptionsRepository, PrescriptionsRepository>();
 builder.Services.AddScoped<IApointmentRepository, ApointmentRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+
 
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -31,6 +34,12 @@ builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IMedical_RecordsService, Medical_RecordsService>();
 builder.Services.AddScoped<IPrescriptionsService, PrescriptionsService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+
+
+
+
 
 
 
