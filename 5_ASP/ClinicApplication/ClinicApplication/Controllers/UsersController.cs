@@ -1,8 +1,8 @@
-﻿using ClinicApplication.Data;
-using ClinicApplication.Migrations;
-using ClinicApplication.Models;
-using ClinicApplication.Services;
-using ClinicApplication.Services.Base;
+﻿using ClinicApplication.Infrastructure.Data;
+//using ClinicApplication.Migrations;
+using ClinicApplication.Domain.Models;
+using ClinicApplication.Application.Services;
+using ClinicApplication.Application.Services.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,12 +12,7 @@ namespace ClinicApplication.Controllers
     [Authorize]
     public class UsersController : Controller
     {
-        //private readonly AppDbContext _db;
-
-        //public UsersController(AppDbContext db)
-        //{
-        //    _db = db;
-        //}
+       
         private readonly IUserService _UserService;
 
         public UsersController(IUserService UserService)
@@ -66,21 +61,11 @@ namespace ClinicApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(User user)
         {
-            //if (ModelState.IsValid)
-            //{
-
-            //    user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-
-            //    _db.Users.Add(user);
-            //    _db.SaveChanges();
-
-            //    return RedirectToAction("Index");
-            //}
-
-            //return View(user);
+           
             if (ModelState.IsValid)
             {
-                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+                  user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+               // user.Password = user.Password;
 
                 await _UserService.AddUser(user);
 
@@ -132,7 +117,7 @@ namespace ClinicApplication.Controllers
                 oldUser.UserName = user.UserName;
                 oldUser.Email = user.Email;
                 oldUser.IsLocked = user.IsLocked;
-                //_db.SaveChanges();
+              
                 await _UserService.UpdateUser(oldUser);
 
                 return RedirectToAction("Index");

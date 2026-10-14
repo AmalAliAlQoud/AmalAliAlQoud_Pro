@@ -1,11 +1,11 @@
-﻿using ClinicApplication.Data;
-using ClinicApplication.Dtos;
-using ClinicApplication.Migrations;
-using ClinicApplication.Models;
-using ClinicApplication.Repositories;
-using ClinicApplication.Repositories.Base;
-using ClinicApplication.Services;
-using ClinicApplication.Services.Base;
+﻿using ClinicApplication.Infrastructure.Data;
+using ClinicApplication.Application.Dtos;
+//using ClinicApplication.Migrations;
+using ClinicApplication.Domain.Models;
+using ClinicApplication.Application.Interfaces.Base;
+using ClinicApplication.Application.Interfaces; //..note
+using ClinicApplication.Application.Services;
+using ClinicApplication.Application.Services.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;

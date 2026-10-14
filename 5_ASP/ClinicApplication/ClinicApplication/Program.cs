@@ -1,9 +1,11 @@
-using ClinicApplication.Data;
-using ClinicApplication.Repositories;
-using ClinicApplication.Repositories.Base;
-using ClinicApplication.Services;
-using ClinicApplication.Services.Base;
+using ClinicApplication.Infrastructure.Data;
+using ClinicApplication.Infrastructure.Repositories;
+using ClinicApplication.Infrastructure.Repositories.Base;
+using ClinicApplication.Application.Interfaces;
+using ClinicApplication.Application.Services;
+using ClinicApplication.Application.Services.Base;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using ClinicApplication.Application.Interfaces.Base;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

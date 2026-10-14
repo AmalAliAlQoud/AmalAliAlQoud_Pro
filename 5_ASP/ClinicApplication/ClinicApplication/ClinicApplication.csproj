@@ -20,4 +20,10 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ClinicApplication.Application\ClinicApplication.Application.csproj" />
+    <ProjectReference Include="..\ClinicApplication.Domain\ClinicApplication.Domain.csproj" />
+    <ProjectReference Include="..\ClinicApplication.Infrastructure\ClinicApplication.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

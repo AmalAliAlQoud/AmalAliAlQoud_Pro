@@ -1,8 +1,8 @@
-﻿using ClinicApplication.Data;
-using ClinicApplication.Models;
-using ClinicApplication.Repositories;
-using ClinicApplication.Repositories.Base;
-using ClinicApplication.Services.Base;
+﻿using ClinicApplication.Application.Dtos;
+using ClinicApplication.Domain.Models;
+using ClinicApplication.Infrastructure.Repositories;
+using ClinicApplication.Infrastructure.Repositories.Base;
+using ClinicApplication.Application.Services.Base;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicApplication.Controllers

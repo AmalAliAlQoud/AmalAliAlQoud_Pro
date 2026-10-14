@@ -1,10 +1,13 @@
-﻿using ClinicApplication.Data;
-using ClinicApplication.Migrations;
-using ClinicApplication.Models;
-using ClinicApplication.Repositories;
-using ClinicApplication.Repositories.Base;
-using ClinicApplication.Services;
-using ClinicApplication.Services.Base;
+﻿using ClinicApplication.Infrastructure.Data;
+//using ClinicApplication.Migrations;
+using ClinicApplication.Domain.Models;
+using ClinicApplication.Infrastructure.Repositories;
+using ClinicApplication.Infrastructure.Repositories.Base;
+using ClinicApplication.Application.Services;
+using ClinicApplication.Application.Services.Base;
+
+
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
