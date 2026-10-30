@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 
 namespace ClinicApplication.Domain.Models
 {
@@ -19,5 +20,8 @@ namespace ClinicApplication.Domain.Models
         public string Password { get; set; }
 
         public bool IsLocked { get; set; }
+
+        [DisplayName("The user's image")]
+        public string? ImageUrl { get; set; }
     }
 }

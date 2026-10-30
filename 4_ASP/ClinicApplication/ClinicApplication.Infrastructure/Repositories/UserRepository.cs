@@ -52,6 +52,34 @@ namespace ClinicApplication.Infrastructure.Repositories
             return user;
         }
 
+        //############################################################
+
+        //public Task<IEnumerable<User>> Login()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public Task<IEnumerable<User>> Register()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public User? GetByUsername(string username)
+        {
+            return _db.Users.FirstOrDefault(x => x.UserName == username);
+        }
+        public User? GetByEmail(string email)
+        {
+            return _db.Users.FirstOrDefault(x => x.Email == email);
+        }
+        public void Add(User user)
+        {
+            _db.Users.Add(user);
+            _db.SaveChanges();
+        }
+       
+        //############################################################
+
         public Task UpdateUser(User user)
         {
             //throw new NotImplementedException();

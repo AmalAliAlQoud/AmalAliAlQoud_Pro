@@ -23,7 +23,8 @@ namespace ClinicApplication.Application.Services
 
                 Name = drDto.Name,
                 Specialty_ID = drDto.SpecialtyId,
-                Phone = drDto.Phone
+                Phone = drDto.Phone,
+                ImageUrl=drDto.ImageUrl,
 
 
             };
@@ -56,7 +57,8 @@ namespace ClinicApplication.Application.Services
                 Name = e.Name,
                 SpecialtyName = e.Specialty.Name,
 
-                Phone = e.Phone
+                Phone = e.Phone,
+                ImageUrl=e.ImageUrl,
             });
         }
 
@@ -82,7 +84,8 @@ namespace ClinicApplication.Application.Services
                 Uuid = dr.Uuid,
                 Name = dr.Name,
                 SpecialtyId = dr.Specialty_ID,
-                Phone = dr.Phone
+                Phone = dr.Phone,
+                ImageUrl=dr.ImageUrl
             };
         }
 
@@ -99,6 +102,7 @@ namespace ClinicApplication.Application.Services
                 existingDoctor.Name = drDto.Name;
                 existingDoctor.Specialty_ID = drDto.SpecialtyId;
                 existingDoctor.Phone = drDto.Phone;
+                existingDoctor.ImageUrl = drDto.ImageUrl;
                 await _unitOfWork.DoctorRepository.UpdateDoctorAsync(existingDoctor);
             }
                 

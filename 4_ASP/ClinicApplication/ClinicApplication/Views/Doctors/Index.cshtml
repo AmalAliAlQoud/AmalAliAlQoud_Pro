@@ -29,6 +29,7 @@
                             <th>Name</th>
                             <th>Specialty</th>
                             <th>Phone</th>
+                              <th>image</th>
                             <th class="text-center" style="width: 200px;">Actions</th>
                         </tr>
                     </thead>
@@ -40,6 +41,19 @@
                                 <td class="fw-semibold">@dr.Name</td>
                                 <td><span class="badge bg-info-subtle text-info border border-info-subtle px-3 py-1 rounded-pill">@dr.SpecialtyName</span></td>
                                 <td><span class="text-muted">@dr.Phone</span></td>
+                                 <td>
+                                      @if (!string.IsNullOrEmpty(dr.ImageUrl))
+                                        {
+                                            <img src="@dr.ImageUrl" alt="Product Image" style="max-width: 100px; max-height: 100px;" />
+                                        }
+                                        else
+                                        {
+                                            <span>No Image</span>
+                                        }
+
+
+
+                                 </td>
                                 <td class="text-center">
                                     <div class="d-flex justify-content-center gap-1">
                                         <a asp-action="Edit"

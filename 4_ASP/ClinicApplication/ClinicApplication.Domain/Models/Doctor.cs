@@ -35,6 +35,8 @@ namespace ClinicApplication.Domain.Models
         // Navigation property for related Appointment
         public ICollection<Appointment>? Appointments { get; set; }
 
+        public string? ImageUrl { get; set; }
+
 
 
     }

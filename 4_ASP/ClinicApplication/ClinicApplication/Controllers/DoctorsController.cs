@@ -29,10 +29,39 @@ namespace ClinicApplication.Controllers
             _DoctorService = DoctorService;
             _SpecialtyService = SpecialtyService;
         }
-        //-----------------------------------------------
-      
+        //------------for upload image-----------------------------------
 
-      
+        private string UploadImage(IFormFile file)
+        {
+            string fileName = Guid.NewGuid().ToString()
+                              + Path.GetExtension(file.FileName);
+
+
+            string folderPath = Path.Combine(
+      Directory.GetCurrentDirectory(),
+      "wwwroot",
+      "images",
+      "doctors"
+    );
+
+            Directory.CreateDirectory(folderPath);
+
+
+            string filePath = Path.Combine(
+          folderPath,
+          fileName);
+
+
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                file.CopyTo(stream);
+            }
+
+            return "/images/doctors/" + fileName;
+        }
+
+        //--------------------------------------------------------------
 
 
         private async Task  loadSpecialties() 
@@ -66,10 +95,15 @@ namespace ClinicApplication.Controllers
 
         [HttpPost]
         
-        public async Task<ActionResult> Create(DoctorCreateDto drDto)
+        public async Task<ActionResult> Create(DoctorCreateDto drDto, IFormFile? image)
         {
             if (ModelState.IsValid)
             {
+                if (image != null)
+                {
+                    drDto.ImageUrl = UploadImage(image);
+                }
+
                 await _DoctorService.AddDoctor(drDto);
 
               
@@ -97,11 +131,16 @@ namespace ClinicApplication.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(DoctorUpdateDto drDto) 
+        public async Task<ActionResult> Edit(DoctorUpdateDto drDto, IFormFile? image) 
 
         {
             if (ModelState.IsValid)
             {
+                if (image != null && image.Length>0)
+                {
+                    drDto.ImageUrl = UploadImage(image);
+                }
+
 
                 await _DoctorService.UpdateDoctor(drDto);
 

@@ -5,6 +5,7 @@ using ClinicApplication.Application.Services;
 using ClinicApplication.Application.Services.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using BCrypt.Net;
 
 
 namespace ClinicApplication.Controllers
@@ -59,13 +60,18 @@ namespace ClinicApplication.Controllers
         // Create POST
         // =========================
         [HttpPost]
-        public async Task<IActionResult> Create(User user)
+        public async Task<IActionResult> Create(User user, IFormFile? image)
         {
            
             if (ModelState.IsValid)
             {
-                  user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-               // user.Password = user.Password;
+                if (image != null)
+                {
+                    user.ImageUrl = UploadImage(image);
+                }
+                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+              
+
 
                 await _UserService.AddUser(user);
 
@@ -102,11 +108,21 @@ namespace ClinicApplication.Controllers
         // Edit POST
         // =========================
         [HttpPost]
-        public async Task<IActionResult> Edit(User user)
+        public async Task<IActionResult> Edit(User user, IFormFile? image)
         {
+            var oldUser = await _UserService.GetUserById(user.Uuid);
+
             if (ModelState.IsValid)
             {
-                var oldUser = await _UserService.GetUserById(user.Uuid);
+                if (image != null && image.Length > 0)
+                {
+                    user.ImageUrl = UploadImage(image);
+                }
+                else
+                {
+                    user.ImageUrl = oldUser.ImageUrl;
+                }
+
 
                 if (oldUser == null)
                     return NotFound();
@@ -117,7 +133,8 @@ namespace ClinicApplication.Controllers
                 oldUser.UserName = user.UserName;
                 oldUser.Email = user.Email;
                 oldUser.IsLocked = user.IsLocked;
-              
+                oldUser.ImageUrl = user.ImageUrl;
+
                 await _UserService.UpdateUser(oldUser);
 
                 return RedirectToAction("Index");
@@ -205,5 +222,38 @@ namespace ClinicApplication.Controllers
            
             return RedirectToAction("Index");
         }
+
+        private string UploadImage(IFormFile file)
+        {
+            string fileName = Guid.NewGuid().ToString()
+                              + Path.GetExtension(file.FileName);
+
+
+            string folderPath = Path.Combine(
+      Directory.GetCurrentDirectory(),
+      "wwwroot",
+      "images",
+      "users"
+    );
+
+            Directory.CreateDirectory(folderPath);
+
+
+            string filePath = Path.Combine(
+          folderPath,
+          fileName);
+
+
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                file.CopyTo(stream);
+            }
+
+            return "/images/users/" + fileName;
+        }
+
+        //--------------------------------------------------------------
+
     }
 }

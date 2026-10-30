@@ -1,4 +1,5 @@
 ﻿using ClinicApplication.Domain.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace ClinicApplication.Application.Dtos
 {
@@ -11,6 +12,8 @@ namespace ClinicApplication.Application.Dtos
         public string? SpecialtyName { get; set; } = string.Empty;
 
         public string? Phone { get; set; } = string.Empty;
+       public IFormFile? ImageFile { get; set; }
+        public string? ImageUrl { get; set; }
 
     }
 
@@ -23,6 +26,8 @@ namespace ClinicApplication.Application.Dtos
 
 
         public string? Phone { get; set; } = string.Empty;
+
+        public string? ImageUrl { get; set; }
 
     }
 
