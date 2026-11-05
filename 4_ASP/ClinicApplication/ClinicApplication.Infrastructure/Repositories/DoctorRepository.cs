@@ -50,6 +50,16 @@ namespace ClinicApplication.Infrastructure.Repositories
             return doctors;
         }
 
+        public async Task<IEnumerable<Doctor>> GetAllDoctorBySpecialist(int speacialistId)
+        {
+            var doctors = await _db.Doctors
+                .Include(d => d.Specialty)
+                .Where(d => d.Specialty_ID == speacialistId)
+                .ToListAsync();
+
+            return doctors;
+        }
+
         public async Task<Doctor> GetDoctorAsyncByIdAsync(string uuid)
         {
             var doctor = await _db.Doctors.FirstOrDefaultAsync(e => e.Uuid == uuid);

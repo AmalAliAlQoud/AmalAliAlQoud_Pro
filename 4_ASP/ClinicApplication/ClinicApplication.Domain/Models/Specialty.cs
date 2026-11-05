@@ -17,6 +17,8 @@ namespace ClinicApplication.Domain.Models
 
         public ICollection<Doctor>? Doctor { get; set; }
 
+        public string? ImageUrl { get; set; }
+
 
     }
 }

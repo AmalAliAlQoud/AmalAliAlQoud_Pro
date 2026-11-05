@@ -1,17 +1,31 @@
-import 'package:firstproj/loginpage.dart';
 import 'package:flutter/material.dart';
 import 'components/app_drawer.dart';
-import 'profilepage.dart';
+import 'ProfilePage.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final String username;
+  final int userId;
+  final String email;
+
+  // استقبال المتغيرات عبر الـ Constructor (الخيار الثاني المرن)
+  const HomePage({
+    this.username = 'User',
+    this.userId = 0,
+    this.email = 'user@email.com',
+    super.key,
+  });
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const AppDrawer(),
+      // تمرير بيانات المستخدم للـ AppDrawer لكي تظهر في القائمة الجانبية
+      drawer: AppDrawer(
+        username: username,
+        email: email,
+      ),
       appBar: AppBar(
-        title: const Text('First App'),
+        title: Text('Welcome, $username'), // عرض اسم المستخدم في العنوان إن أردتِ
         backgroundColor: Colors.deepPurple,
       ),
       body: Container(
@@ -23,11 +37,12 @@ class HomePage extends StatelessWidget {
             radius: 0.9,
           ),
         ),
-        child: const Center(
+        child: Center(
           child: Text(
-            'Home page',
-            style: TextStyle(
-              fontSize: 30,
+            'Welcome \n $username ',
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 26,
               color: Colors.white,
               fontWeight: FontWeight.w700,
             ),

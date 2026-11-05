@@ -8,7 +8,10 @@ namespace ClinicApplication.Application.Interfaces
 
         Task<IEnumerable<Doctor>> GetAllDoctorAsync();
         Task<IEnumerable<Doctor>> GetAllDoctorAsyncInclude();
-        
+       
+        Task<IEnumerable<Doctor>> GetAllDoctorBySpecialist(int speacialistId); //add----
+
+
         Task<Doctor> GetDoctorAsyncByIdAsync(string uuid);
         Task<Doctor> GetDoctorAsyncByIdAsyncInclude(string uuid);
         Task AddDoctorAsync(Doctor dr);

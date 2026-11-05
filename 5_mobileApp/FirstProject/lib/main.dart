@@ -1,8 +1,10 @@
-import 'package:firstproj/profilepage.dart';
+import 'package:firstproj/ProfilePage.dart';
 import 'package:flutter/material.dart';
 
-import 'homepage.dart';
-import 'loginpage.dart';
+import 'HomePage.dart';
+import 'LoginPage.dart';
+import 'LoginPage2.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
 
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: HomePage(),
+      home: LoginPage(),
       debugShowCheckedModeBanner:false ,
     );
   }

@@ -19,7 +19,38 @@ namespace ClinicApplication.Controllers
         }
 
 
-        //}
+        private string UploadImage(IFormFile file)
+        {
+            string fileName = Guid.NewGuid().ToString()
+                              + Path.GetExtension(file.FileName);
+
+
+            string folderPath = Path.Combine(
+      Directory.GetCurrentDirectory(),
+      "wwwroot",
+      "images",
+      "Specialties"
+    );
+
+            Directory.CreateDirectory(folderPath);
+
+
+            string filePath = Path.Combine(
+          folderPath,
+          fileName);
+
+
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                file.CopyTo(stream);
+            }
+
+            return "/images/Specialties/" + fileName;
+        }
+
+        //--------------------------------------------------------------
+
         public async Task<ActionResult> Index()
         {
             //IEnumerable<Specialty> Specialties = _db.Specialties.ToList();
@@ -40,12 +71,14 @@ namespace ClinicApplication.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(Specialty sp)
+        public async Task<ActionResult> Create(Specialty sp,IFormFile? image)
         {
             if (ModelState.IsValid)
             {
-                //_db.Specialties.Add(sp);
-                //_db.SaveChanges();
+                if (image != null)
+                {
+                    sp.ImageUrl = UploadImage(image);
+                }
                 await _SpecialtyService.AddSpecialty(sp);
                 return RedirectToAction("Index");
             }
@@ -75,13 +108,18 @@ namespace ClinicApplication.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(Specialty sp)
+        public async Task<ActionResult> Edit(Specialty sp, IFormFile? image) 
         {
+
             if (ModelState.IsValid)
             {
+                if (image != null && image.Length > 0)
+                {
+                    sp.ImageUrl = UploadImage(image);
+                }
 
 
-             //   var oldSpecialty = _db.Specialties.FirstOrDefault(e => e.Uuid == sp.Uuid);
+                //   var oldSpecialty = _db.Specialties.FirstOrDefault(e => e.Uuid == sp.Uuid);
                 var oldSpecialty = await _SpecialtyService.GetSpecialtyById(sp.Uuid);
 
 
@@ -89,6 +127,7 @@ namespace ClinicApplication.Controllers
                     return NotFound();
 
                 oldSpecialty.Name = sp.Name;
+                oldSpecialty.ImageUrl = sp.ImageUrl;
                 // _db.Specialties.Update(sp);
 
 

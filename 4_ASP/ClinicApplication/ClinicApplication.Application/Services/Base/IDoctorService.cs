@@ -13,5 +13,7 @@ namespace ClinicApplication.Application.Services.Base
         Task AddDoctor(DoctorCreateDto drDto);
         Task UpdateDoctor(DoctorUpdateDto dr);
         Task DeleteDoctor(string uuid);
+
+        Task<IEnumerable<DoctorDto>> GetDoctorBySpecialistId(int SpecialistId);//add
     }
 }

@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
 
-import '../homepage.dart';
-import '../loginpage.dart'; // استيراد صفحة تسجيل الدخول
-import '../profilepage.dart';
+import '../DoctorsPage.dart';
+import '../HomePage.dart';
+import '../LoginPage.dart';
+import '../PatientsPage.dart';
+import '../ProfilePage.dart';
+import '../SpecialyPage.dart';
+
+
+
 
 class AppDrawer extends StatelessWidget {
-  const AppDrawer({super.key});
+  final String username;
+  final String email;
+
+  const AppDrawer({
+    super.key,
+    this.username = 'Guest',
+    this.email = 'guest@app.com',
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,20 +29,21 @@ class AppDrawer extends StatelessWidget {
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
-                const UserAccountsDrawerHeader(
-                  accountName: Text('Amal AlQoud'),
-                  accountEmail: Text('amalalqoud@live.com'),
+                UserAccountsDrawerHeader(
+                  accountName: Text(username),
+                  accountEmail: Text(email),
                   currentAccountPicture: CircleAvatar(
                     backgroundColor: Colors.white,
                     child: Text(
-                      'A',
-                      style: TextStyle(
+                      username.isNotEmpty ? username[0].toUpperCase() : 'G',
+                      style: const TextStyle(
                         fontSize: 24,
                         color: Colors.purple,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.purple,
                   ),
                 ),
@@ -44,6 +58,54 @@ class AppDrawer extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => const HomePage(),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(),
+                ListTile(
+                  leading: const Icon(Icons.people_outline_sharp),
+                  title: const Text('Doctors'),
+                  subtitle: const Text('Go to Doctors screen'),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const doctorspage(),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(),
+                ListTile(
+                  leading: const Icon(Icons.category_outlined),
+                  title: const Text('Specialty'),
+                  subtitle: const Text('Go to Specialty'),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const specialypage(),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(),
+                ListTile(
+                  leading: const Icon(Icons.emoji_people_outlined),
+                  title: const Text('patients'),
+                  subtitle: const Text('Go to patients  page'),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const patientspage(),
                       ),
                     );
                   },
@@ -68,8 +130,6 @@ class AppDrawer extends StatelessWidget {
               ],
             ),
           ),
-
-          // عنصر تسجيل الخروج في أقصى أسفل الـ Drawer
           const Divider(),
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),

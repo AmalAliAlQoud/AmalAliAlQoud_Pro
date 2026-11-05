@@ -28,7 +28,7 @@
                         <tr>
                             <th class="ps-3" style="width: 50px;">#</th>
                             <th>Name</th>
-                            
+                            <th>image</th>
                             <th class="text-center" style="width: 200px;">Actions</th>
                         </tr>
                     </thead>
@@ -38,6 +38,19 @@
                             <tr>
                                 <td class="ps-3 fw-bold text-secondary">@count</td>
                                 <td class="fw-semibold">@sp.Name</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(sp.ImageUrl))
+                                    {
+                                        <img src="@sp.ImageUrl" alt="Product Image" style="max-width: 100px; max-height: 100px;" />
+                                    }
+                                    else
+                                    {
+                                        <span>No Image</span>
+                                    }
+
+
+
+                                </td>
                                 <td class="text-center">
                                     <div class="d-flex justify-content-center gap-1">
                                         <a asp-action="Edit"

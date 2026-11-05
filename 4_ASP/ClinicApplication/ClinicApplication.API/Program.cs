@@ -15,7 +15,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 options.UseSqlServer(conectionString));
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<ISpecialtyService, SpecialtyService>();
 builder.Services.AddScoped<IDoctorService, DoctorService>();
@@ -23,6 +22,7 @@ builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IMedical_RecordsService, Medical_RecordsService>();
 builder.Services.AddScoped<IPrescriptionsService, PrescriptionsService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 
 

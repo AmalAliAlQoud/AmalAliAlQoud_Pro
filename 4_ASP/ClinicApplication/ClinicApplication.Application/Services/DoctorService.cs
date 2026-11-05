@@ -62,6 +62,8 @@ namespace ClinicApplication.Application.Services
             });
         }
 
+      
+
         public Task<IEnumerable<DoctorDto>> GetAllDoctorInclude()
         {
             throw new NotImplementedException();
@@ -93,6 +95,35 @@ namespace ClinicApplication.Application.Services
         {
             throw new NotImplementedException();
         }
+
+        //public Task GetDoctorBySpecialistId(int SpecialistId)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public async Task<IEnumerable<DoctorDto>> GetDoctorBySpecialistId(int specialtyId)
+        {
+            // جلب الأطباء التابعين لهذا التخصص من الـ Repository
+            var doctors = await _unitOfWork.DoctorRepository.GetAllDoctorBySpecialist(specialtyId);
+
+            if (doctors == null)
+            {
+                return null;
+            }
+
+            // عمل Mapping للبيانات وحمايتها باستخدام ?.
+            return doctors.Select(e => new DoctorDto
+            {
+                Id = e.Id,
+                Uuid = e.Uuid,
+                Name = e.Name,
+                SpecialtyName = e.Specialty?.Name,
+                Phone = e.Phone,
+                ImageUrl = e.ImageUrl
+            });
+        }
+
+     
 
         public async Task UpdateDoctor(DoctorUpdateDto drDto)
         {

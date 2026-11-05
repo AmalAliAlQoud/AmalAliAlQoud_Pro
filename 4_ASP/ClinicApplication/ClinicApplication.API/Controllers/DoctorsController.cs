@@ -27,5 +27,21 @@ namespace ClinicApplication.API.Controllers
 
             return Ok(new { message = "Get all Doctors", Doctors });
         }
+
+
+        [HttpGet("GetDoctorsBySpecialty/{specialtyId}")]
+        public async Task<IActionResult> GetDoctorsBySpecialty(int specialtyId) // استبدل Guid بـ int إذا كان الرقم عبارة عن رقم عادي
+        {
+            // جلب الأطباء المرتبطين بهذا التخصص من الخدمة
+            var doctors =  _DoctorService.GetDoctorBySpecialistId(specialtyId);
+
+            if (doctors == null )
+            {
+                return NotFound(new { message = "No doctors found for this specialty." });
+            }
+
+            return Ok(new { message = "Doctors retrieved successfully", doctors });
+        }
+
     }
 }

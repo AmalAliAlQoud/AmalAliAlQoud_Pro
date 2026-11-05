@@ -25,6 +25,7 @@ builder.Services.AddScoped<IMedical_RecordsRepository, Medical_RecordsRepository
 builder.Services.AddScoped<IPrescriptionsRepository, PrescriptionsRepository>();
 builder.Services.AddScoped<IApointmentRepository, ApointmentRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IEmailService, EmailService>();
 
 
 

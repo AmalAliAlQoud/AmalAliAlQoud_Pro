@@ -20,8 +20,9 @@
                         Are you sure you want to edit this Specialty?
                     </div>
 
-                    <form asp-action="Edit" method="post">
+                    <form asp-action="Edit" method="post" enctype="multipart/form-data">
                         <input asp-for="Uuid" type="hidden" />
+                        <input type="hidden" asp-for="ImageUrl" />
 
                         <div class="text-danger mb-3" asp-validation-summary="All"></div>
 
@@ -29,6 +30,11 @@
                             <label asp-for="Name" class="form-label fw-bold"></label>
                             <input asp-for="Name" class="form-control" />
                             <span class="text-danger" asp-validation-for="Name"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">The specialist's image</label>
+                            <input type="file" name="image" class="form-control" placeholder="upload image" />
                         </div>
 
                        
